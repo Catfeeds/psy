@@ -30,7 +30,7 @@ $this->breadcrumbs = array($this->pageTitle);
     <tr>
         <th class="text-center">排序</th>
         <th class="text-center">ID</th>
-        <th class="text-center">产品信息</th>
+        <th class="text-center">咨询师信息</th>
         <th class="text-center">收藏者信息</th>
         <th class="text-center">添加时间</th>
         <!-- <th class="text-center">修改时间</th> -->

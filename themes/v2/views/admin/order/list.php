@@ -32,7 +32,8 @@ $this->breadcrumbs = array($this->pageTitle);
         <th class="text-center">ID</th>
         <th class="text-center">客户姓名</th>
         <th class="text-center">客户电话</th>
-        <th class="text-center">商品</th>
+        <th class="text-center">咨询师</th>
+        <th class="text-center">金额</th>
         <th class="text-center">备注</th>
         <th class="text-center">添加时间</th>
         <th class="text-center">修改时间</th>
@@ -45,7 +46,8 @@ $this->breadcrumbs = array($this->pageTitle);
             <td style="text-align:center;vertical-align: middle"><?php echo $v->id; ?></td>
             <td class="text-center"><?=$v->user?$v->user->name:''?></td>
             <td class="text-center"><?=isset($v->user->phone)?$v->user->phone:''?></td>
-            <td class="text-center"><?=$v->product?$v->product->name:''?></td>     
+            <td class="text-center"><?=$v->product?$v->product->name:''?></td>
+            <td class="text-center"><?=$v->price?></td>     
              <td class="text-center"><?=$v->note?></td>
             <td class="text-center"><?=date('Y-m-d',$v->created)?></td>
             <td class="text-center"><?=date('Y-m-d',$v->updated)?></td>

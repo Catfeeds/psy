@@ -12,7 +12,7 @@ class SaveExt extends Save{
     {
         return array(
             'user'=>array(self::BELONGS_TO, 'UserExt', 'uid'),
-            'product'=>array(self::BELONGS_TO, 'ProductExt', 'hid'),
+            'product'=>array(self::BELONGS_TO, 'UserExt', 'pid'),
             // 'images'=>array(self::HAS_MANY, 'AlbumExt', 'pid'),
         );
     }

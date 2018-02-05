@@ -1,8 +1,8 @@
 <?php
 /**
- * 用户控制器
+ * 咨询师控制器
  */
-class UserController extends AdminController{
+class ZxsController extends AdminController{
     
     public $cates = [];
 
@@ -13,30 +13,30 @@ class UserController extends AdminController{
     public function init()
     {
         parent::init();
-        $this->controllerName = '用户';
+        $this->controllerName = '咨询师';
         // $this->cates = CHtml::listData(ArticleCateExt::model()->normal()->findAll(),'id','name');
     }
     public function actionList($type='title',$value='',$time_type='created',$time='',$cate='',$status='')
     {
         $modelName = $this->modelName;
         $criteria = new CDbCriteria;
-        $criteria->addCondition('type=1');
+        $criteria->addCondition('type=2');
         if($value = trim($value))
             if ($type=='title') {
                 $criteria->addSearchCondition('name', $value);
             } elseif($type=='phone') {
                 $criteria->addSearchCondition('phone', $value);
             } elseif($type=='com') {
-                $cre = new CDbCriteria;
-                $cre->addSearchCondition('name', $value);
-                $coms = CompanyExt::model()->undeleted()->findAll($cre);
-                $ids = [];
-                if($coms) {
-                    foreach ($coms as $c) {
-                        $ids[] = $c->id;
-                    }
-                    $criteria->addInCondition('cid', $ids);
-                }
+                // $cre = new CDbCriteria;
+                $criteria->addSearchCondition('company', $value);
+                // $coms = CompanyExt::model()->undeleted()->findAll($cre);
+                // $ids = [];
+                // if($coms) {
+                //     foreach ($coms as $c) {
+                //         $ids[] = $c->id;
+                //     }
+                //     $criteria->addInCondition('cid', $ids);
+                // }
                 
             }
         //添加时间、刷新时间筛选
@@ -70,8 +70,7 @@ class UserController extends AdminController{
         if(Yii::app()->request->getIsPostRequest()) {
             $info->attributes = Yii::app()->request->getPost($modelName,[]);
             !$info->pwd && $info->pwd = md5('123456');
-            $info->type = 1;
-            // $info->pwd = md5($info->pwd);
+            $info->type = 2;
             if($info->save()) {
                 $this->setMessage('操作成功','success',['list']);
             } else {

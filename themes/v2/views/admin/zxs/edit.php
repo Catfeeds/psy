@@ -32,11 +32,18 @@ $childArea = $parent ? AreaExt::model()->getByParent($parent)->normal()->findAll
     <div class="col-md-2"><?php echo $form->error($article, 'phone') ?></div>
 </div>
 <div class="form-group">
-    <label class="col-md-2 control-label">出生年份<span class="required" aria-required="true">*</span></label>
+    <label class="col-md-2 control-label">身份证<span class="required" aria-required="true">*</span></label>
     <div class="col-md-4">
-        <?php echo $form->textField($article, 'year', array('class' => 'form-control')); ?>
+        <?php echo $form->textField($article, 'id_card', array('class' => 'form-control')); ?>
     </div>
-    <div class="col-md-2"><?php echo $form->error($article, 'year') ?></div>
+    <div class="col-md-2"><?php echo $form->error($article, 'id_card') ?></div>
+</div>
+<div class="form-group">
+    <label class="col-md-2 control-label">机构<span class="required" aria-required="true">*</span></label>
+    <div class="col-md-4">
+        <?php echo $form->textField($article, 'company', array('class' => 'form-control')); ?>
+    </div>
+    <div class="col-md-2"><?php echo $form->error($article, 'company') ?></div>
 </div>
 <div class="form-group">
     <label class="col-md-2 control-label">学历</label>
@@ -44,6 +51,13 @@ $childArea = $parent ? AreaExt::model()->getByParent($parent)->normal()->findAll
         <?php echo $form->dropDownList($article, 'edu',  Yii::app()->params['edu'], array('class'=>'form-control select2','empty'=>'无')); ?>
     </div>
     <div class="col-md-2"><?php echo $form->error($article, 'edu') ?></div>
+</div>
+<div class="form-group">
+    <label class="col-md-2 control-label">资质</label>
+    <div class="col-md-4">
+        <?php echo $form->dropDownList($article, 'mid', Yii::app()->params['zz'], array('class'=>'form-control select2','empty'=>'无')); ?>
+    </div>
+    <div class="col-md-2"><?php echo $form->error($article, 'mid') ?></div>
 </div>
 <div class="form-group">
                 <label class="col-md-2 control-label text-nowrap">所在区域<span class="required" aria-required="true">*</span></label>
@@ -65,12 +79,54 @@ $childArea = $parent ? AreaExt::model()->getByParent($parent)->normal()->findAll
                     <span class="help-block"><?php echo $form->error($article, 'area').$form->error($article, 'street'); ?></span>
                 </div>
             </div>
-<div class="form-group">
-    <label class="col-md-2 control-label">性别</label>
+            <div class="form-group">
+    <label class="col-md-2 control-label">工作开始年份<span class="required" aria-required="true">*</span></label>
     <div class="col-md-4">
-        <?php echo $form->radioButtonList($article, 'sex', UserExt::$sex, array('separator' => '')); ?>
+        <?php echo $form->textField($article, 'work_year', array('class' => 'form-control')); ?>
     </div>
-    <div class="col-md-2"><?php echo $form->error($article, 'sex') ?></div>
+    <div class="col-md-2"><?php echo $form->error($article, 'work_year') ?></div>
+</div>
+<div class="form-group">
+    <label class="col-md-2 control-label">是否支持线下资讯</label>
+    <div class="col-md-4">
+        <?php echo $form->radioButtonList($article, 'zx_mode', ['支持','不支持'], array('separator' => '')); ?>
+    </div>
+    <div class="col-md-2"><?php echo $form->error($article, 'zx_mode') ?></div>
+</div>
+<div class="form-group">
+    <label class="col-md-2 control-label">线下资讯场所<span class="required" aria-required="true">*</span></label>
+    <div class="col-md-4">
+        <?php echo $form->textField($article, 'place', array('class' => 'form-control')); ?>
+    </div>
+    <div class="col-md-2"><?php echo $form->error($article, 'place') ?></div>
+</div>
+<div class="form-group">
+    <label class="col-md-2 control-label">收费<span class="required" aria-required="true">*</span></label>
+    <div class="col-md-4">
+        <?php echo $form->textField($article, 'price', array('class' => 'form-control')); ?>
+    </div>
+    <div class="col-md-2"><?php echo $form->error($article, 'price') ?></div><div class="help-block">每小时收费</div>
+</div>
+<div class="form-group">
+    <label class="col-md-2 control-label">专长</label>
+    <div class="col-md-4">
+        <?php echo $form->dropDownList($article, 'zc',  CHtml::listData(TagExt::model()->findAll("cate='zc'"),'id','name'), array('class'=>'form-control select2','empty'=>'无')); ?>
+    </div>
+    <div class="col-md-2"><?php echo $form->error($article, 'zc') ?></div>
+</div>
+<div class="form-group">
+    <label class="col-md-2 control-label">领域</label>
+    <div class="col-md-4">
+        <?php echo $form->dropDownList($article, 'ly',  CHtml::listData(TagExt::model()->findAll("cate='ly'"),'id','name'), array('class'=>'form-control select2','empty'=>'无')); ?>
+    </div>
+    <div class="col-md-2"><?php echo $form->error($article, 'ly') ?></div>
+</div>
+<div class="form-group">
+    <label class="col-md-2 control-label">个人简介</label>
+    <div class="col-md-8">
+        <?php echo $form->textArea($article, 'content', array('id'=>'UserExt_content')); ?>
+    </div>
+    <div class="col-md-2"><?php echo $form->error($article, 'content')  ?></div>
 </div>
 <div class="form-group">
     <label class="col-md-2 control-label text-nowrap">头像</label>
@@ -78,6 +134,13 @@ $childArea = $parent ? AreaExt::model()->getByParent($parent)->normal()->findAll
         <?php $this->widget('FileUpload',array('model'=>$article,'attribute'=>'image','inputName'=>'img','width'=>400,'height'=>300)); ?>
         <span class="help-block">建议尺寸：430*230</span> 
     </div>
+</div>
+<div class="form-group">
+    <label class="col-md-2 control-label">性别</label>
+    <div class="col-md-4">
+        <?php echo $form->radioButtonList($article, 'sex', UserExt::$sex, array('separator' => '')); ?>
+    </div>
+    <div class="col-md-2"><?php echo $form->error($article, 'sex') ?></div>
 </div>
 <div class="form-group">
     <label class="col-md-2 control-label">状态</label>

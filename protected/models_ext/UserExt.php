@@ -39,6 +39,9 @@ class UserExt extends User{
             'news'=>array(self::HAS_MANY, 'ArticleExt', 'uid'),
             'comments'=>array(self::HAS_MANY, 'CommentExt', 'uid'),
             'product'=>array(self::BELONGS_TO, 'ProductExt', 'pid'),
+            'areaInfo'=>array(self::BELONGS_TO, 'AreaExt', 'area'),
+            'streetInfo'=>array(self::BELONGS_TO, 'AreaExt', 'street'),
+
         );
     }
 
@@ -48,10 +51,18 @@ class UserExt extends User{
     public function rules() {
         $rules = parent::rules();
         return array_merge($rules, array(
-            // array('phone', 'unique', 'message'=>'{attribute}已存在'),
+            array('phone', 'unique', 'message'=>'{attribute}已存在'),
+            array('phone', 'phonerule'),
         ));
     }
 
+    public function phonerule()
+    {
+        $phone = $this->phone;
+        if(!preg_match("/^1[34578]\d{9}$/", $phone)){
+            $this->addError('phone', '请输入正确的手机号');
+        }
+    }
     /**
      * 返回指定AR类的静态模型
      * @param string $className AR类的类名
@@ -68,7 +79,12 @@ class UserExt extends User{
         else {
             $this->updated = time();
         }
-            
+        if($this->area && $areaInfo = $this->areaInfo) {
+            $this->area_name = $areaInfo->name;
+        }
+        if($this->street && $streetInfo = $this->streetInfo) {
+            $this->street_name = $streetInfo->name;
+        }
         return parent::beforeValidate();
     }
 

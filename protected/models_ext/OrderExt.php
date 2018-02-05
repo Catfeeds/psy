@@ -11,7 +11,7 @@ class OrderExt extends Order{
     public function relations()
     {
         return array(
-            'product'=>array(self::BELONGS_TO, 'ProductExt', 'pid'),
+            'product'=>array(self::BELONGS_TO, 'UserExt', 'pid'),
             'user'=>array(self::BELONGS_TO, 'UserExt', 'uid'),
         );
     }

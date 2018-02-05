@@ -1,6 +1,6 @@
 <?php
 /**
- * 举报控制器
+ * 反馈控制器
  */
 class ReportController extends AdminController{
 	
@@ -15,7 +15,7 @@ class ReportController extends AdminController{
 	public function init()
 	{
 		parent::init();
-		$this->controllerName = '举报';
+		$this->controllerName = '反馈';
 		// $this->cates = CHtml::listData(LeagueExt::model()->normal()->findAll(),'id','name');
 		// $this->cates1 = CHtml::listData(TeamExt::model()->normal()->findAll(),'id','name');
 	}
@@ -25,7 +25,7 @@ class ReportController extends AdminController{
 		$criteria = new CDbCriteria;
 		if($value = trim($value))
             if ($type=='title') {
-                $criteria->addSearchCondition('name', $value);
+                $criteria->addSearchCondition('reason', $value);
             } 
         //添加时间、刷新时间筛选
         if($time_type!='' && $time!='')

@@ -17,14 +17,14 @@ $this->breadcrumbs = array($this->controllerName.'管理', $this->pageTitle);
 <div class="form-group">
     <label class="col-md-2 control-label">用户</label>
     <div class="col-md-4">
-        <?php echo $form->dropDownList($article, 'uid', CHtml::listData(UserExt::model()->normal()->findAll(),'id','name'), array('class' => 'form-control select2', 'encode' => false,'empty'=>'请选择')); ?>
+        <?php echo $form->dropDownList($article, 'uid', CHtml::listData(UserExt::model()->normal()->findAll('type=1'),'id','name'), array('class' => 'form-control select2', 'encode' => false,'empty'=>'请选择')); ?>
     </div>
     <div class="col-md-2"><?php echo $form->error($article, 'uid') ?></div>
 </div>
 <div class="form-group">
-    <label class="col-md-2 control-label">产品</label>
+    <label class="col-md-2 control-label">咨询师</label>
     <div class="col-md-4">
-        <?php echo $form->dropDownList($article, 'pid', CHtml::listData(ProductExt::model()->normal()->findAll(),'id','name'), array('class' => 'form-control select2', 'encode' => false,'empty'=>'请选择')); ?>
+        <?php echo $form->dropDownList($article, 'pid', CHtml::listData(UserExt::model()->normal()->findAll('type=2'),'id','name'), array('class' => 'form-control select2', 'encode' => false,'empty'=>'请选择')); ?>
     </div>
     <div class="col-md-2"><?php echo $form->error($article, 'pid') ?></div>
 </div>

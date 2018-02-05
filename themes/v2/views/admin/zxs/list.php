@@ -32,8 +32,9 @@ $this->breadcrumbs = array($this->pageTitle);
         <th class="text-center">ID</th>
         <th class="text-center">姓名</th>
         <th class="text-center">手机号</th>
-        <th class="text-center">地区</th>
-        <th class="text-center">学历</th>
+        <th class="text-center">区域</th>
+        <th class="text-center">机构</th>
+        <th class="text-center">资质</th>
         <th class="text-center">添加时间</th>
         <th class="text-center">修改时间</th>
         <th class="text-center">状态</th>
@@ -49,9 +50,8 @@ $this->breadcrumbs = array($this->pageTitle);
             <td class="text-center"><?=$v->name?></td>
             <td class="text-center"><?=$v->phone?></td>
             <td class="text-center"><?=$v->area_name.' '.$v->street_name?></td>
-
-            <td class="text-center"><?=$v->edu?Yii::app()->params['edu'][$v->edu]:'暂无'?></td>         
-      
+            <td class="text-center"><?=$v->company?></td> 
+            <td class="text-center"><?=$v->mid?Yii::app()->params['zz'][$v->mid]:'暂无'?></td>         
             <td class="text-center"><?=date('Y-m-d H:i:s',$v->created)?></td>
             <td class="text-center"><?=date('Y-m-d H:i:s',$v->updated)?></td>
             <td class="text-center"><?php echo CHtml::ajaxLink(UserExt::$status[$v->status],$this->createUrl('changeStatus'), array('type'=>'get', 'data'=>array('id'=>$v->id,'class'=>get_class($v)),'success'=>'function(data){location.reload()}'), array('class'=>'btn btn-sm '.UserExt::$statusStyle[$v->status])); ?></td>

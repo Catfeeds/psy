@@ -30,6 +30,9 @@
  * @property integer $work_year
  * @property integer $mid
  * @property string $id_card
+ * @property string $street_name
+ * @property string $area_name
+ * @property string $content
  * @property integer $street
  * @property integer $area
  * @property integer $edu
@@ -64,12 +67,13 @@ class User extends CActiveRecord
 			array('name, created', 'required'),
 			array('parent, is_jl, is_manage, qf_uid, pid, vip_expire, type, ly, zc, zx_mode, work_year, mid, street, area, edu, year, sex, status, deleted, sort, created, updated', 'numerical', 'integerOnly'=>true),
 			array('pwd, true_name, id_pic, openid, company, place, ava, image', 'length', 'max'=>255),
-			array('wx, name, city, pro, id_card', 'length', 'max'=>100),
+			array('wx, name, city, pro, id_card, street_name, area_name', 'length', 'max'=>100),
 			array('phone', 'length', 'max'=>15),
 			array('price', 'length', 'max'=>10),
+			array('content', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, pwd, wx, phone, true_name, name, parent, is_jl, is_manage, id_pic, qf_uid, pid, city, pro, openid, vip_expire, company, type, price, ly, zc, place, zx_mode, work_year, mid, id_card, street, area, edu, year, ava, image, sex, status, deleted, sort, created, updated', 'safe', 'on'=>'search'),
+			array('id, pwd, wx, phone, true_name, name, parent, is_jl, is_manage, id_pic, qf_uid, pid, city, pro, openid, vip_expire, company, type, price, ly, zc, place, zx_mode, work_year, mid, id_card, street_name, area_name, content, street, area, edu, year, ava, image, sex, status, deleted, sort, created, updated', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -116,6 +120,9 @@ class User extends CActiveRecord
 			'work_year' => 'Work Year',
 			'mid' => 'Mid',
 			'id_card' => 'Id Card',
+			'street_name' => 'Street Name',
+			'area_name' => 'Area Name',
+			'content' => 'Content',
 			'street' => 'Street',
 			'area' => 'Area',
 			'edu' => 'Edu',
@@ -175,6 +182,9 @@ class User extends CActiveRecord
 		$criteria->compare('work_year',$this->work_year);
 		$criteria->compare('mid',$this->mid);
 		$criteria->compare('id_card',$this->id_card,true);
+		$criteria->compare('street_name',$this->street_name,true);
+		$criteria->compare('area_name',$this->area_name,true);
+		$criteria->compare('content',$this->content,true);
 		$criteria->compare('street',$this->street);
 		$criteria->compare('area',$this->area);
 		$criteria->compare('edu',$this->edu);

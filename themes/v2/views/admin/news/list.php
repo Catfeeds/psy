@@ -16,7 +16,7 @@ $this->breadcrumbs = array($this->pageTitle);
             </div>
             <?php Yii::app()->controller->widget("DaterangepickerWidget",['time'=>$time,'params'=>['class'=>'form-control chose_text']]);?>
             <div class="form-group">
-                <?php echo CHtml::dropDownList('type',$type,Yii::app()->params['newstype'],array('class'=>'form-control chose_select','encode'=>false,'prompt'=>'--选择板块--')); ?>
+                <?php echo CHtml::dropDownList('type',$type,Yii::app()->params['show_place'],array('class'=>'form-control chose_select','encode'=>false,'prompt'=>'--选择板块--')); ?>
             </div>
             <button type="submit" class="btn blue">搜索</button>
             <a class="btn yellow" onclick="removeOptions()"><i class="fa fa-trash"></i>&nbsp;清空</a>
@@ -50,7 +50,7 @@ $this->breadcrumbs = array($this->pageTitle);
             <td style="text-align:center;vertical-align: middle"><?php echo $v->id; ?></td>
             <td class="text-center"><?=$v->title?></td>
             <td class="text-center"><?=$v->author?></td>
-            <td class="text-center"><?=$v->type?Yii::app()->params['newstype'][$v->type]:'暂无'?></td>            
+            <td class="text-center"><?=$v->show_place?Yii::app()->params['show_place'][$v->show_place]:'暂无'?></td>            
             <td class="text-center"><?=date('Y-m-d',$v->created)?></td>
             <td class="text-center"><?=date('Y-m-d',$v->updated)?></td>
             <td class="text-center"><?php echo CHtml::ajaxLink(ArticleExt::$status[$v->status],$this->createUrl('ajaxChangeStatus'), array('type'=>'get', 'data'=>array('id'=>$v->id),'success'=>'function(data){location.reload()}'), array('class'=>'btn btn-sm '.ArticleExt::$statusStyle[$v->status])); ?></td>

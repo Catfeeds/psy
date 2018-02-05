@@ -13,10 +13,11 @@ class TagExt extends Tag
     static $xinfangCate = [
         //直接式标签
         'direct' => [
-            'tab' => 'tab分类',
+            // 'tab' => 'tab分类',
             'wzlm' => '文章栏目',
-            'wzbq' => '文章标签',
-            'pcate' => '产品类别',
+            // 'wzbq' => '文章标签',
+            'zc' => '咨询师专长',
+            'ly' => '咨询师领域',
         ],
         //区间式标签，区间式标签可以增删
         'range' => [
