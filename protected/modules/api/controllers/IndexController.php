@@ -15,47 +15,14 @@ class IndexController extends ApiController
 
     public function actionIndex()
     {
-        $data = $data['imgs'] = $data['cates'] = $data['short_recoms'] = $data['long_recoms'] = [];
-        // 轮播图
-        $banner = SiteExt::getAttr('qjpz','indeximages');
-        if($banner) {
-            foreach ($banner as $key => $value) {
-                $data['imgs'][] = Yii::app()->file->is_heng?ImageTools::fixImage($value,750,376):ImageTools::fixImage($value,750,826);
+        $data = [];
+        $res = ArticleExt::model()->undeleted()->findAll("show_place=1");
+        if($res) {
+            foreach ($res as $key => $value) {
+                $data[] = ['id'=>$value->id,'title'=>$value->title,'desc'=>$value->desc,'image'=>ImageTools::fixImage($value->image)];
             }
         }
-        // 分类图
-        $tags = TagExt::model()->normal()->findAll(['condition'=>"cate='pcate'",'limit'=>5]);
-        if($tags) {
-            foreach ($tags as $key => $value) {
-                $data['cates'][] = [
-                    'id'=>$value->id,
-                    'name'=>$value->name,
-                    'img'=>ImageTools::fixImage($value->icon,200,200),
-                ];
-            }
-        }
-        // 三个推荐
-        $shs = RecomExt::model()->normal()->findAll(['condition'=>'cid=2','limit'=>2]);
-        if($shs) {
-            foreach ($shs as $key => $value) {
-                $data['short_recoms'][] = [
-                    'pid'=>$value->getObj()->id,
-                    // 'name'=>$value->name,//750
-                    'img'=>ImageTools::fixImage($value->image,370,260),
-                ];
-            }
-        }
-        // 三个推荐
-        $shs = RecomExt::model()->normal()->findAll(['condition'=>'cid=1','limit'=>1]);
-        if($shs) {
-            foreach ($shs as $key => $value) {
-                $data['long_recoms'][] = [
-                    'pid'=>$value->getObj()->id,
-                    // 'name'=>$value->name,//750
-                    'img'=>ImageTools::fixImage($value->image,750,260),
-                ];
-            }
-        }
+        // var_dump($res);exit;
         $this->frame['data'] = $data;
     }
 

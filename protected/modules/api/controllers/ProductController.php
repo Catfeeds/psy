@@ -8,6 +8,12 @@ class ProductController extends ApiController
 		$uid = (int)Yii::app()->request->getQuery('uid',0);
 		$save = (int)Yii::app()->request->getQuery('save',0);
 		$order = (int)Yii::app()->request->getQuery('order',0);
+		$mode = (int)Yii::app()->request->getQuery('mode',0);
+		$zc = (int)Yii::app()->request->getQuery('zc',0);
+		$ly = (int)Yii::app()->request->getQuery('ly',0);
+		$area = (int)Yii::app()->request->getQuery('area',0);
+		$street = (int)Yii::app()->request->getQuery('street',0);
+		$sort = (int)Yii::app()->request->getQuery('sort',0);
 		$page = (int)Yii::app()->request->getQuery('page',1);
 		$limit = (int)Yii::app()->request->getQuery('limit',20);
 		$kw = $this->cleanXss(Yii::app()->request->getQuery('kw',''));
@@ -22,6 +28,40 @@ class ProductController extends ApiController
 			$criteria->addCondition("cid=:cid");
 			$criteria->params[':cid'] = $cid;
 		}
+		if($mode) {
+			$criteria->addCondition("zx_mode=:zx_mode");
+			$criteria->params[':zx_mode'] = $mode==1?$mode:0;
+		}
+		if($zc) {
+			$criteria->addCondition("zc=:zc");
+			$criteria->params[':zc'] = $zc;
+		}
+		if($ly) {
+			$criteria->addCondition("ly=:ly");
+			$criteria->params[':ly'] = $ly;
+		}
+		if($area) {
+			$criteria->addCondition("area=:area");
+			$criteria->params[':area'] = $area;
+		}
+		if($street) {
+			$criteria->addCondition("street=:street");
+			$criteria->params[':street'] = $street;
+		}
+		if($sort) {
+			switch ($sort) {
+				case '1':
+					$criteria->order = 'pf desc';
+					break;
+				case '2':
+					$criteria->order = 'work_year asc';
+					break;
+				default:
+					$criteria->order = 'sort desc,updated desc';
+					break;
+			}
+		}
+
 		if($save&&$uid) {
 			$ids = [];
 			$saeids = Yii::app()->db->createCommand("select pid from save where uid=$uid")->queryAll();
@@ -42,7 +82,8 @@ class ProductController extends ApiController
 			}
 			$criteria->addInCondition('id',$ids);
 		}
-		$ress = ProductExt::model()->normal()->getList($criteria,$limit);
+		$criteria->addCondition('type=2');
+		$ress = UserExt::model()->normal()->getList($criteria,$limit);
 		$infos = $ress->data;
 		$pager = $ress->pagination;
 		if($infos) {
@@ -50,9 +91,13 @@ class ProductController extends ApiController
 				$data['list'][] = [
 					'id'=>$value->id,
 					'name'=>Tools::u8_title_substr($value->name,20),
-					'price'=>$value->price,
-					'old_price'=>$value->old_price,
-					'ts'=>$value->shortdes,
+					'content'=>Tools::u8_title_substr($value->content,60),
+					'place'=>$value->street_name,
+					'hits'=>$value->hits,
+					'year'=>date('Y')-$value->work_year+1,
+					'zc'=>$value->zc?TagExt::model()->findByPk($value->zc)->name:'',
+					'ly'=>$value->ly?TagExt::model()->findByPk($value->ly)->name:'',
+					'zz'=>$value->mid?Yii::app()->params['zz'][$value->mid]:'',
 					'image'=>ImageTools::fixImage($value->image,370,250),
 				];
 			}
@@ -67,14 +112,16 @@ class ProductController extends ApiController
 
 	public function actionInfo($id='',$openid='')
 	{
-		$info = ProductExt::model()->findByPk($id);
+		$info = UserExt::model()->findByPk($id);
+		$info->hits += 1;
+		$info->save();
 		$data = $info->attributes;
-		$images = $info->images;
-		if($images) {
-			foreach ($images as $key => $value) {
-				$data['images'][] = ImageTools::fixImage($value->url); 
-			}
-		}
+		// $images = $info->images;
+		// if($images) {
+		// 	foreach ($images as $key => $value) {
+		// 		$data['images'][] = ImageTools::fixImage($value->url); 
+		// 	}
+		// }
 		$data['is_save'] = 0;
 		if($openid) {
 			$user = UserExt::getUserByOpenId($openid);

@@ -11,6 +11,8 @@ class SiteExt extends Site{
     public static $cates = [
         'appid'=>'',
         'apps'=>'',
+        'mch_id'=>'',
+        'mch_key'=>'',
         'indeximages'=>'',
         'productnopic'=>'',
         'articlenopic'=>'',
@@ -35,6 +37,8 @@ class SiteExt extends Site{
             'articlenopic'=>['type'=>'image','max'=>1,'name'=>'默认文章图片'],
             'appid'=>['type'=>'text','name'=>'appid'],
             'apps'=>['type'=>'text','name'=>'appsecret'],
+            'mch_id'=>['type'=>'text','name'=>'商户ID'],
+            'mch_key'=>['type'=>'text','name'=>'商户支付key'],
             'tel'=>['type'=>'text','name'=>'站点电话'],
             'qq'=>['type'=>'text','name'=>'站点qq'],
             'addr'=>['type'=>'text','name'=>'地址'],

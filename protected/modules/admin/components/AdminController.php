@@ -75,6 +75,7 @@ class AdminController extends Controller
             // ]],
             ['label'=>'用户管理','icon'=>'icon-speedometer','url'=>['/admin/user/list'],'active'=>$this->route=='admin/user/edit'],
             ['label'=>'订单管理','icon'=>'icon-speedometer','url'=>['/admin/order/list'],'active'=>$this->route=='admin/order/edit'],
+            ['label'=>'评分管理','icon'=>'icon-speedometer','url'=>['/admin/grade/list'],'active'=>$this->route=='admin/grade/edit'],
             // ['label'=>'客户管理','icon'=>'icon-speedometer','url'=>['/admin/customer/list'],'active'=>$this->route=='admin/customer/edit'],
             ['label'=>'收藏管理','icon'=>'icon-speedometer','url'=>['/admin/save/list'],'active'=>$this->route=='admin/save/edit'],
             ['label'=>'资讯管理','icon'=>'icon-speedometer','url'=>['/admin/news/list'],'active'=>$this->route=='admin/news/edit'],

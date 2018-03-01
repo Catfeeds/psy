@@ -111,6 +111,9 @@ $config1 = array(
 			'stateKeyPrefix' => '_hangjiauc',
             'allowAutoLogin' => true,
 		),
+        'wxPay' => [
+            'class' => 'application.components.WxPay',
+        ],
         'redis' => [
             'class' => 'application.components.redis.HangjiaRedisConnection',
             'redisConfig' => function() {
