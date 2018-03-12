@@ -116,45 +116,46 @@ class ProductController extends ApiController
 		$info->hits += 1;
 		$info->save();
 		$data = $info->attributes;
-		// $images = $info->images;
-		// if($images) {
-		// 	foreach ($images as $key => $value) {
-		// 		$data['images'][] = ImageTools::fixImage($value->url); 
-		// 	}
-		// }
-		$data['is_save'] = 0;
-		if($openid) {
-			$user = UserExt::getUserByOpenId($openid);
-			if($uid = $user->id) {
-				$data['is_save'] = SaveExt::model()->count("pid=$id and uid=$uid")?1:0;
+		$data['image'] && $data['image'] = ImageTools::fixImage($data['image']);
+		$tags = [];
+		$data['zx_mode']==0 && $tags[] = '可线下咨询';
+		if($data['ly']) {
+			$tags[] = TagExt::model()->findByPk($data['ly'])->name;
+		}
+		if($data['zc']) {
+			$tags[] = TagExt::model()->findByPk($data['zc'])->name;
+		}
+		$data['tags'] = $tags;
+		$data['mid'] && $data['zz'] = Yii::app()->params['zz'][$data['mid']];
+		$data['edu'] && $data['edu'] = Yii::app()->params['edu'][$data['edu']];
+		$data['work_year'] = date('Y')-$data['work_year']+1;
+		$data['times'] = $data['comments'] = [];
+		if($times = $info->times) {
+			// var_dump(1);exit;
+			foreach ($times as $key => $value) {
+				$tmp['week'] = $value['week'];
+				$tmp['begin'] = $value['begin'];
+				$tmp['end'] = $value['end'];
+				$data['times'][] = $tmp;
+				unset($tmp);
 			}
 		}
-		if($confs = $info->data_conf) {
-			$fields = Yii::app()->file->getFields();
-			$confs = json_decode($confs,true);
-			$ids = $tagname = [];
-			foreach ($confs as $key => $value) {
-				$ids[] = $value;
+		if($comments = $info->comments) {
+			foreach ($comments as $key => $value) {
+				$thisuser = $value->user;
+				$tmp['username'] = $value->is_nm?'匿名':$thisuser->name;
+				$tmp['image'] = ImageTools::fixImage($value->is_nm?$SiteExt::getAttr('qjpz','usernopic'):$thisuser->image);
+				$tmp['note'] = $value['note'];
+				$tmp['time'] = date('Y-m-d',$value['updated']);
+				$data['comments'][] = $tmp;
+				unset($tmp);
 			}
-			$criteria = new CDbCriteria;
-			$criteria->select = 'id,name';
-			$criteria->addInCondition('id',$ids);
-
-			$tags = TagExt::model()->findAll($criteria);
-			if($tags) {
-				foreach ($tags as $key => $value) {
-					$tagname[$value['id']] = $value['name'];
-				}
-			}
-			// var_dump($tags[0]['attributes']);exit;
-			foreach ($confs as $key => $value) {
-				$data['params'][$fields[$key]] = $tagname[$value];
-			}
-			$data['created'] = date('Y-m-d',$data['created']);
-			$data['updated'] = date('Y-m-d',$data['updated']);
-			
 		}
-		$this->frame['data'] = $data;
+		$nowdata = [];
+		foreach (['id','name','image','area_name','street_name','tags','zz','company','pf','hits','work_year','content','place','price_note','price','times','comments','phone'] as $key => $value) {
+			$nowdata[$value] = $data[$value];
+		}
+		$this->frame['data'] = $nowdata;
 	}
 
 	public function actionGetCates()

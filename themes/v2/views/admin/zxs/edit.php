@@ -108,6 +108,13 @@ $childArea = $parent ? AreaExt::model()->getByParent($parent)->normal()->findAll
     <div class="col-md-2"><?php echo $form->error($article, 'price') ?></div><div class="help-block">每小时收费</div>
 </div>
 <div class="form-group">
+    <label class="col-md-2 control-label">收费介绍<span class="required" aria-required="true">*</span></label>
+    <div class="col-md-4">
+        <?php echo $form->textField($article, 'price_note', array('class' => 'form-control')); ?>
+    </div>
+    <div class="col-md-2"><?php echo $form->error($article, 'price_note') ?></div>
+</div>
+<div class="form-group">
     <label class="col-md-2 control-label">专长</label>
     <div class="col-md-4">
         <?php echo $form->dropDownList($article, 'zc',  CHtml::listData(TagExt::model()->findAll("cate='zc'"),'id','name'), array('class'=>'form-control select2','empty'=>'无')); ?>
