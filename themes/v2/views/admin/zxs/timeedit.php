@@ -1,64 +1,32 @@
 <?php
-$this->pageTitle = $this->controllerName.'列表';
+$this->pageTitle = $info->name.'可用时间列表';
 $this->breadcrumbs = array($this->pageTitle);
 ?>
 <div class="table-toolbar">
-    <div class="btn-group pull-left">
-        <form class="form-inline">
-            <div class="form-group">
-                <?php echo CHtml::dropDownList('type',$type,array('title'=>'姓名','phone'=>'手机','com'=>'公司名'),array('class'=>'form-control','encode'=>false)); ?>
-            </div>
-            <div class="form-group">
-                <?php echo CHtml::textField('value',$value,array('class'=>'form-control chose_text')) ?>
-            </div>
-            <div class="form-group">
-                <?php echo CHtml::dropDownList('time_type',$time_type,array('created'=>'添加时间','updated'=>'修改时间'),array('class'=>'form-control','encode'=>false)); ?>
-            </div>
-            <?php Yii::app()->controller->widget("DaterangepickerWidget",['time'=>$time,'params'=>['class'=>'form-control chose_text']]);?>
-            <button type="submit" class="btn blue">搜索</button>
-            <a class="btn yellow" onclick="removeOptions()"><i class="fa fa-trash"></i>&nbsp;清空</a>
-        </form>
-    </div>
+    
     <div class="pull-right">
-        <a href="<?php echo $this->createAbsoluteUrl('edit') ?>" class="btn blue">
-            添加<?=$this->controllerName?> <i class="fa fa-plus"></i>
+        <a href="<?php echo $this->createAbsoluteUrl('timeadd',['id'=>$info->id]) ?>" class="btn blue">
+            添加可用时间 <i class="fa fa-plus"></i>
         </a>
     </div>
 </div>
    <table class="table table-bordered table-striped table-condensed flip-content table-hover">
     <thead class="flip-content">
     <tr>
-        <th class="text-center">排序</th>
         <th class="text-center">ID</th>
-        <th class="text-center">姓名</th>
-        <th class="text-center">手机号</th>
-        <th class="text-center">区域</th>
-        <th class="text-center">机构</th>
-        <th class="text-center">资质</th>
-        <th class="text-center">添加时间</th>
-        <th class="text-center">修改时间</th>
-        <th class="text-center">状态</th>
+        <th class="text-center">星期</th>
+        <th class="text-center">时间段</th>
         <th class="text-center">操作</th>
     </tr>
     </thead>
     <tbody>
-    <?php foreach($infos as $k=>$v): ?>
+    <?php foreach($times as $k=>$v): ?>
         <tr>
-            <td style="text-align:center;vertical-align: middle" class="warning sort_edit"
-                data-id="<?php echo $v['id'] ?>"><?php echo $v['sort'] ?></td>
             <td style="text-align:center;vertical-align: middle"><?php echo $v->id; ?></td>
-            <td class="text-center"><?=$v->name?></td>
-            <td class="text-center"><?=$v->phone?></td>
-            <td class="text-center"><?=$v->area_name.' '.$v->street_name?></td>
-            <td class="text-center"><?=$v->company?></td> 
-            <td class="text-center"><?=$v->mid?Yii::app()->params['zz'][$v->mid]:'暂无'?></td>         
-            <td class="text-center"><?=date('Y-m-d H:i:s',$v->created)?></td>
-            <td class="text-center"><?=date('Y-m-d H:i:s',$v->updated)?></td>
-            <td class="text-center"><?php echo CHtml::ajaxLink(UserExt::$status[$v->status],$this->createUrl('changeStatus'), array('type'=>'get', 'data'=>array('id'=>$v->id,'class'=>get_class($v)),'success'=>'function(data){location.reload()}'), array('class'=>'btn btn-sm '.UserExt::$statusStyle[$v->status])); ?></td>
+            <td class="text-center"><?=$v->week?Yii::app()->params['week'][$v->week]:''?></td>
+            <td class="text-center"><?=$v->begin?Yii::app()->params['time_area'][$v->begin]:''?></td>
 
             <td style="text-align:center;vertical-align: middle">
-                <a href="<?php echo $this->createUrl('timeedit',array('id'=>$v->id,'referrer'=>Yii::app()->request->url)) ?>" class="btn default btn-xs blue"><i class="fa fa-edit"></i> 可用时间 </a>
-                <a href="<?php echo $this->createUrl('edit',array('id'=>$v->id,'referrer'=>Yii::app()->request->url)) ?>" class="btn default btn-xs green"><i class="fa fa-edit"></i> 编辑 </a>
                 <?php echo CHtml::htmlButton('删除', array('data-toggle'=>'confirmation', 'class'=>'btn btn-xs red', 'data-title'=>'确认删除？', 'data-btn-ok-label'=>'确认', 'data-btn-cancel-label'=>'取消', 'data-popout'=>true,'ajax'=>array('url'=>$this->createUrl('del'),'type'=>'get','success'=>'function(data){location.reload()}','data'=>array('id'=>$v->id,'class'=>get_class($v)))));?>
 
 
@@ -67,7 +35,6 @@ $this->breadcrumbs = array($this->pageTitle);
     <?php endforeach;?>
     </tbody>
 </table>
-<?php $this->widget('VipLinkPager', array('pages'=>$pager)); ?>
 
 <script>
 <?php Tools::startJs(); ?>

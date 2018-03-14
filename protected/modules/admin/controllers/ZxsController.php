@@ -95,4 +95,25 @@ class ZxsController extends AdminController{
             
         }
     }
+
+    public function actionTimeedit($id='')
+    {
+        $info = UserExt::model()->findByPk($id);
+        $this->render('timeedit',['info'=>$info,'times'=>$info->times]);
+    }
+
+    public function actionTimeadd($id='')
+    {
+        $info = UserExt::model()->findByPk($id);
+        $a = new UserTimeExt;
+        if(Yii::app()->request->getIsPostRequest()) {
+            $a->attributes = Yii::app()->request->getPost('UserTimeExt',[]);
+            if($a->save()) {
+                $this->setMessage('操作成功','success',['timeedit?id='.$info->id]);
+            } else {
+                $this->setMessage(array_values($a->errors)[0][0],'error');
+            }
+        } 
+        $this->render('timeadd',['info'=>$info,'article'=>$a]);
+    }
 }

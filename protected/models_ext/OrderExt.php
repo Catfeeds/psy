@@ -5,6 +5,9 @@
  * @date(2017.2.5)
  */
 class OrderExt extends Order{
+    public static $status = [
+        '已支付','已确认'
+    ];
 	/**
      * 定义关系
      */
@@ -40,6 +43,12 @@ class OrderExt extends Order{
     }
 
     public function beforeValidate() {
+        if(strstr($this->begin,'-')) {
+            $this->begin = strtotime($this->begin);
+        }
+        if(strstr($this->end,'-')) {
+            $this->end = strtotime($this->end);
+        }
         if($this->getIsNewRecord())
             $this->created = $this->updated = time();
         else

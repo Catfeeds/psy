@@ -1,8 +1,8 @@
 <?php
-$this->pageTitle = $this->controllerName.'新建/编辑';
+$this->pageTitle = '可用时间新建';
 $this->breadcrumbs = array($this->controllerName.'管理', $this->pageTitle);
 ?>
-<?php $this->widget('ext.ueditor.UeditorWidget',array('id'=>'ArticleExt_content','options'=>"toolbars:[['fullscreen','source','undo','redo','|','customstyle','paragraph','fontfamily','fontsize'],
+<?php $this->widget('ext.ueditor.UeditorWidget',array('id'=>'UserExt_content','options'=>"toolbars:[['fullscreen','source','undo','redo','|','customstyle','paragraph','fontfamily','fontsize'],
         ['bold','italic','underline','fontborder','strikethrough','superscript','subscript','removeformat',
         'formatmatch', 'autotypeset', 'blockquote', 'pasteplain','|',
         'forecolor','backcolor','insertorderedlist','insertunorderedlist','|',
@@ -14,71 +14,34 @@ $this->breadcrumbs = array($this->controllerName.'管理', $this->pageTitle);
         'horizontal','inserttable','|',
         'print','preview','searchreplace']]")); ?>
 <?php $form = $this->beginWidget('HouseForm', array('htmlOptions' => array('class' => 'form-horizontal'))) ?>
+<div class="form-group">
+    <label class="col-md-2 control-label">名字<span class="required" aria-required="true">*</span></label>
+    <div class="col-md-4">
 
-<div class="form-group">
-    <label class="col-md-2 control-label">用户</label>
-    <div class="col-md-4">
-        <?php echo $form->dropDownList($article, 'uid', CHtml::listData(UserExt::model()->normal()->findAll('type=1'),'id','name'), array('class' => 'form-control select2', 'encode' => false,'empty'=>'请选择')); ?>
+        <input type="text" class="form-control" readonly="readonly" value="<?=$info->name?>">
+        <input type="hidden" class="form-control" name="UserTimeExt[uid]" readonly="readonly" value="<?=$info->id?>">
     </div>
-    <div class="col-md-2"><?php echo $form->error($article, 'uid') ?></div>
+    <div class="col-md-2"><?php echo $form->error($article, 'name') ?></div>
 </div>
 <div class="form-group">
-    <label class="col-md-2 control-label">咨询师</label>
+    <label class="col-md-2 control-label">星期</label>
     <div class="col-md-4">
-        <?php echo $form->dropDownList($article, 'pid', CHtml::listData(UserExt::model()->normal()->findAll('type=2'),'id','name'), array('class' => 'form-control select2', 'encode' => false,'empty'=>'请选择')); ?>
+        <?php echo $form->dropDownList($article, 'week',  Yii::app()->params['week'], array('class'=>'form-control select2','empty'=>'无')); ?>
     </div>
-    <div class="col-md-2"><?php echo $form->error($article, 'pid') ?></div>
+    <div class="col-md-2"><?php echo $form->error($article, 'week') ?></div>
 </div>
 <div class="form-group">
-    <label class="col-md-2 control-label">开始时间<span class="required" aria-required="true">*</span></label>
+    <label class="col-md-2 control-label">时间段</label>
     <div class="col-md-4">
-        <div class="input-group date form_datetime" >
-            <?php echo $form->textField($article,'begin',array('class'=>'form-control','value'=>($article->begin?date('Y-m-d',$article->begin):''))); ?>
-            <span class="input-group-btn">
-              <button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
-           </span>
-        </div>
+        <?php echo $form->dropDownList($article, 'begin',  Yii::app()->params['time_area'], array('class'=>'form-control select2','empty'=>'无')); ?>
     </div>
     <div class="col-md-2"><?php echo $form->error($article, 'begin') ?></div>
-</div>
-<div class="form-group">
-    <label class="col-md-2 control-label">结束时间<span class="required" aria-required="true">*</span></label>
-    <div class="col-md-4">
-        <div class="input-group date form_datetime" >
-            <?php echo $form->textField($article,'end',array('class'=>'form-control','value'=>($article->end?date('Y-m-d',$article->end):''))); ?>
-            <span class="input-group-btn">
-              <button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
-           </span>
-        </div>
-    </div>
-    <div class="col-md-2"><?php echo $form->error($article, 'end') ?></div>
-</div>
-<div class="form-group">
-    <label class="col-md-2 control-label">备注<span class="required" aria-required="true">*</span></label>
-    <div class="col-md-4">
-        <?php echo $form->textField($article, 'note', array('class' => 'form-control')); ?>
-    </div>
-    <div class="col-md-2"><?php echo $form->error($article, 'note') ?></div>
-</div>
-<div class="form-group">
-    <label class="col-md-2 control-label">金额<span class="required" aria-required="true">*</span></label>
-    <div class="col-md-4">
-        <?php echo $form->textField($article, 'price', array('class' => 'form-control')); ?>
-    </div>
-    <div class="col-md-2"><?php echo $form->error($article, 'price') ?></div>
-</div>
-<div class="form-group">
-    <label class="col-md-2 control-label">状态</label>
-    <div class="col-md-4">
-        <?php echo $form->radioButtonList($article, 'status', OrderExt::$status, array('separator' => '')); ?>
-    </div>
-    <div class="col-md-2"><?php echo $form->error($article, 'status') ?></div>
 </div>
 <div class="form-actions">
     <div class="row">
         <div class="col-md-offset-3 col-md-9">
             <button type="submit" class="btn green">保存</button>
-            <?php echo CHtml::link('返回',$this->createUrl('list'), array('class' => 'btn default')) ?>
+            <?php echo CHtml::link('返回',$this->createUrl('timeedit',['id'=>$info->id]), array('class' => 'btn default')) ?>
         </div>
     </div>
 </div>
@@ -134,20 +97,20 @@ $js = "
               allowClear: true
            });
 
-        var houses_edit = $('#plot');
-        var data = {};
-        if( houses_edit.length && houses_edit.data('houses') ){
-          data = eval(houses_edit.data('houses'));
-        }
+				var houses_edit = $('#plot');
+				var data = {};
+				if( houses_edit.length && houses_edit.data('houses') ){
+					data = eval(houses_edit.data('houses'));
+				}
 
-        $('#plot').select2({
-          multiple:true,
-          ajax: getHousesAjax,
-          language: 'zh-CN',
-          initSelection: function(element, callback){
-            callback(data);
-          }
-        });
+				$('#plot').select2({
+					multiple:true,
+					ajax: getHousesAjax,
+					language: 'zh-CN',
+					initSelection: function(element, callback){
+						callback(data);
+					}
+				});
 
              $('.form_datetime').datetimepicker({
                  autoclose: true,

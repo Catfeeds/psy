@@ -4,7 +4,7 @@
  * @author steven.allen <[<email address>]>
  * @date(2017.2.12)
  */
-class GradeExt extends Grade{
+class UserTimeExt extends UserTime{
     public static $status = [
         '未处理','已处理'
     ];
@@ -15,7 +15,7 @@ class GradeExt extends Grade{
     {
          return array(
             'user'=>array(self::BELONGS_TO, 'UserExt', 'uid'),
-            'buser'=>array(self::BELONGS_TO, 'UserExt', 'oid'),
+            'plot'=>array(self::BELONGS_TO, 'PlotExt', 'hid'),
         );
     }
 
@@ -95,14 +95,6 @@ class GradeExt extends Grade{
             ),
             'BaseBehavior'=>'application.behaviors.BaseBehavior',
         );
-    }
-
-    public function afterSave()
-    {
-        $user = $this->buser;
-        $user->pf = Yii::app()->db->createCommand("select avg(`num`) from grade where oid=".$this->oid)->queryScalar();
-        $user->save();
-        parent::afterSave();
     }
 
 }

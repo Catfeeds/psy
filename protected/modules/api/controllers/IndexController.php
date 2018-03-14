@@ -55,13 +55,21 @@ class IndexController extends ApiController
         }
     }
 
+    public function actionGetUserTags()
+    {
+        $this->frame['data'] = Yii::app()->params['edu'];
+    }
+
     public function actionSetUser()
     {
         $data['openid'] = Yii::app()->request->getPost('openid','');
         $data['name'] = Yii::app()->request->getPost('name','');
         $data['sex'] = Yii::app()->request->getPost('sex','');
-        $data['pro'] = Yii::app()->request->getPost('pro','');
+        $data['year'] = Yii::app()->request->getPost('year','');
+        $data['edu'] = Yii::app()->request->getPost('edu','');
         $data['city'] = Yii::app()->request->getPost('city','');
+        $data['pro'] = Yii::app()->request->getPost('pro','');
+        $data['type'] = 1;
         if(!$data['openid']) {
             $this->returnError('参数错误');
         }
@@ -70,6 +78,23 @@ class IndexController extends ApiController
         } else {
             $obj = new UserExt;
             $obj->attributes = $data;
+            if($area = AreaExt::model()->find("name='".$data['pro']."'")) {
+                $data['area'] = $area->id;
+            } else {
+                $area = new AreaExt;
+                $area->name = $data['pro'];
+                $area->save();
+                $data['area'] = $area->id;
+            }
+            if($street = AreaExt::model()->find("name='".$data['city']."'")) {
+                $data['street'] = $street->id;
+            } else {
+                $street = new AreaExt;
+                $street->parent = $area->id;
+                $street->name = $data['city'];
+                $street->save();
+                $data['street'] = $street->id;
+            }
             if(!$obj->save()) {
                 $this->returnError(current(current($obj->getErrors())));
             } else {
@@ -79,11 +104,205 @@ class IndexController extends ApiController
 
     }
 
+    public function actionSetZxs()
+    {
+        $data['uid'] = Yii::app()->request->getPost('uid','');
+        $data['image'] = Yii::app()->request->getPost('image','');
+        $data['id_card'] = Yii::app()->request->getPost('id_card','');
+        $data['company'] = Yii::app()->request->getPost('company','');
+        $data['work_year'] = Yii::app()->request->getPost('work_year','');
+        $data['area'] = Yii::app()->request->getPost('area','');
+        $data['street'] = Yii::app()->request->getPost('street','');
+        $data['zx_mode'] = Yii::app()->request->getPost('mode','');
+        $data['content'] = Yii::app()->request->getPost('content','');
+        $data['place'] = Yii::app()->request->getPost('place','');
+        $data['ly'] = Yii::app()->request->getPost('ly','');
+        $data['zc'] = Yii::app()->request->getPost('zc','');
+        $data['mid'] = Yii::app()->request->getPost('zz','');
+        $data['edu'] = Yii::app()->request->getPost('edu','');
+        $data['price'] = Yii::app()->request->getPost('price','');
+        $data['price_note'] = Yii::app()->request->getPost('price_note','');
+        $times = Yii::app()->request->getPost('times','');
+        $data['type'] = 2;
+        if(!$data['uid']) {
+            $this->returnError('参数错误');
+        }
+        if($user = UserExt::model()->find("uid=".$data['uid']) && $user->type==2){
+            $this->returnError('该用户已存在');
+        } else {
+            $obj = $user;
+            $obj->attributes = $data;
+            if(!$obj->save()) {
+                $this->returnError(current(current($obj->getErrors())));
+            } else {
+                if($times) {
+                    foreach ($times as $key => $value) {
+                        $tm = new UserTimeExt;
+                        $tm->uid = $data['uid'];
+                        $tm->week = substr($value, 0,1);
+                        $tm->begin = substr($value, 1,1);
+                        $tm->save();
+                    }
+                }
+            }
+        }
+    }
+
     public function actionGetIntro()
     {
         $info = ArticleExt::model()->find(['condition'=>'type=3','order'=>'updated desc']);
         if($info) {
             $this->frame['data'] = $info->attributes;
         }
+    }
+
+    public function actionAddOrder()
+    {
+        if(Yii::app()->request->getIsPostRequest()) {
+            $data['uid'] = Yii::app()->request->getPost('uid',0);
+            $data['pid'] = Yii::app()->request->getPost('pid',0);
+            $data['price'] = Yii::app()->request->getPost('price',0);
+            $data['begin'] = Yii::app()->request->getPost('begin',0);
+            $data['end'] = Yii::app()->request->getPost('end',0);
+            if(!$data['uid'] || !$data['pid'] || !$data['end']) {
+                return $this->returnError('参数错误');
+            }
+            $order = new OrderExt;
+            $order->attributes = $data;
+            if(!$order->save()) {
+                $this->returnError(current(current($order->getErrors())));
+            } 
+        }
+    }
+
+    public function actionPriceList($uid='')
+    {
+        $user = UserExt::model()->findByPk($uid);
+        $infos = OrderExt::model()->findAll(['condition'=>"status=1 and pid=$uid",'order'=>'updated desc']);
+        $data = [];
+        $num = 0;
+        if($infos) {
+            foreach ($infos as $key => $value) {
+                $num += $value->price;
+                $data[] = [
+                    'name'=>$value->user->name,
+                    'time'=>date("Y-m-d H:i:s",$value->updated),
+                    'price'=>$value->price,
+                ];
+            }
+        }
+        $newdata = ['num'=>$num,'list'=>$data];
+        $this->frame['data'] = $newdata;
+    }
+
+    public function actionUserList($uid='')
+    {
+        $user = UserExt::model()->findByPk($uid);
+        $infos = OrderExt::model()->findAll(['condition'=>"pid=$uid",'order'=>'updated desc']);
+        $data = [];
+        // $num = 0;
+        if($infos) {
+            foreach ($infos as $key => $value) {
+                $iuser = $value->user;
+                // $num += $value->price;
+                $data[] = [
+                    'name'=>$iuser->name,
+                    'phone'=>$iuser->phone,
+                    // 'price'=>$value->price,
+                    'begin'=>date('m-d H:i',$value->begin),
+                    'end'=>date('m-d H:i',$value->end),
+                ];
+            }
+        }
+        // $newdata = ['num'=>$num,'list'=>$data];
+        $this->frame['data'] = $data;
+    }
+
+    public function actionSetGrade()
+    {
+        $data['uid'] = Yii::app()->request->getPost('uid',0);
+        $data['oid'] = Yii::app()->request->getPost('oid',0);
+        $data['num'] = Yii::app()->request->getPost('num','');
+        $data['note'] = Yii::app()->request->getPost('note','');
+        $data['is_nm'] = Yii::app()->request->getPost('is_nm','');
+        if(!$data['uid'] || !$data['uid'] || !$data['num']) {
+            return $this->returnError('参数错误');
+        }
+        $order = new GradeExt;
+        $order->attributes = $data;
+        if(!$order->save()) {
+            $this->returnError(current(current($order->getErrors())));
+        } 
+    }
+
+    public function actionOrderList($uid='')
+    {
+        $user = UserExt::model()->findByPk($uid);
+        $infos = OrderExt::model()->findAll(['condition'=>"uid=$uid",'order'=>'updated desc']);
+        $data = [];
+        // $num = 0;
+        if($infos) {
+            foreach ($infos as $key => $value) {
+                $iuser = $value->product;
+                $tags = [];
+                $iuser['zx_mode']==0 && $tags[] = '可线下咨询';
+                if($iuser['ly']) {
+                    $tags[] = TagExt::model()->findByPk($iuser['ly'])->name;
+                }
+                if($iuser['zc']) {
+                    $tags[] = TagExt::model()->findByPk($iuser['zc'])->name;
+                }
+                // $num += $value->price;
+                $data[] = [
+                    'id'=>$value->id,
+                    'name'=>$iuser->name,
+                    'image'=>ImageTools::fixImage($iuser->image),
+                    'phone'=>$iuser->phone,
+                    'tags'=>$tags,
+                    'price'=>$value->price,
+                    'status'=>OrderExt::$status[$value->status],
+                    'day'=>date('Y-m-d',$value->begin),
+                    'begin'=>date('H',$value->begin),
+                    'end'=>date('H',$value->end),
+                ];
+            }
+        }
+        // $newdata = ['num'=>$num,'list'=>$data];
+        $this->frame['data'] = $data;
+    }
+
+    public function actionOrderInfo($id='')
+    {
+        $value = OrderExt::model()->findByPk($id);
+        $iuser = $value->product;
+        $tags = [];
+        $iuser['zx_mode']==0 && $tags[] = '可线下咨询';
+        if($iuser['ly']) {
+            $tags[] = TagExt::model()->findByPk($iuser['ly'])->name;
+        }
+        if($iuser['zc']) {
+            $tags[] = TagExt::model()->findByPk($iuser['zc'])->name;
+        }
+        // $num += $value->price;
+        $data = [
+            'id'=>$id,
+            'name'=>$iuser->name,
+            'image'=>ImageTools::fixImage($iuser->image),
+            'phone'=>$iuser->phone,
+            'tags'=>$tags,
+            'price'=>$value->price,
+            'status'=>OrderExt::$status[$value->status],
+            'day'=>date('Y-m-d',$value->begin),
+            'begin'=>date('H',$value->begin),
+            'end'=>date('H',$value->end),
+        ];
+        $this->frame['data'] = $data;
+    }
+
+    public function actionCheckOrder($id='')
+    {
+        $value = OrderExt::model()->findByPk($id);
+        $value->status=1;
+        $value->save();
     }
 }
