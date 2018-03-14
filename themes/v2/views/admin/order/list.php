@@ -34,9 +34,10 @@ $this->breadcrumbs = array($this->pageTitle);
         <th class="text-center">客户电话</th>
         <th class="text-center">咨询师</th>
         <th class="text-center">金额</th>
-        <th class="text-center">备注</th>
+        <th class="text-center">时间段</th>
         <th class="text-center">添加时间</th>
         <th class="text-center">修改时间</th>
+        <th class="text-center">状态</th>
         <th class="text-center">操作</th>
     </tr>
     </thead>
@@ -48,9 +49,10 @@ $this->breadcrumbs = array($this->pageTitle);
             <td class="text-center"><?=isset($v->user->phone)?$v->user->phone:''?></td>
             <td class="text-center"><?=$v->product?$v->product->name:''?></td>
             <td class="text-center"><?=$v->price?></td>     
-             <td class="text-center"><?=$v->note?></td>
+             <td class="text-center"><?=date('Y-m-d H:i:s',$v->begin).' 到 '.date('Y-m-d H:i:s',$v->end)?></td>
             <td class="text-center"><?=date('Y-m-d',$v->created)?></td>
             <td class="text-center"><?=date('Y-m-d',$v->updated)?></td>
+            <td class="text-center"><?php echo CHtml::ajaxLink(OrderExt::$status[$v->status],$this->createUrl('changeStatus'), array('type'=>'get', 'data'=>array('id'=>$v->id,'class'=>get_class($v)),'success'=>'function(data){location.reload()}'), array('class'=>'btn btn-sm '.UserExt::$statusStyle[$v->status])); ?></td>
 
             <td style="text-align:center;vertical-align: middle">
                 <!-- <a href="<?php echo $this->createUrl('edit',array('id'=>$v->id)); ?>" class="btn default btn-xs green"><i class="fa fa-edit"></i> 修改 </a> -->

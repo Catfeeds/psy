@@ -10,6 +10,8 @@ class ProductController extends ApiController
 		$order = (int)Yii::app()->request->getQuery('order',0);
 		$mode = (int)Yii::app()->request->getQuery('mode',0);
 		$zc = (int)Yii::app()->request->getQuery('zc',0);
+		$edu = (int)Yii::app()->request->getQuery('edu',0);
+		$zz = (int)Yii::app()->request->getQuery('zz',0);
 		$ly = (int)Yii::app()->request->getQuery('ly',0);
 		$area = (int)Yii::app()->request->getQuery('area',0);
 		$street = (int)Yii::app()->request->getQuery('street',0);
@@ -35,6 +37,14 @@ class ProductController extends ApiController
 		if($zc) {
 			$criteria->addCondition("zc=:zc");
 			$criteria->params[':zc'] = $zc;
+		}
+		if($zz) {
+			$criteria->addCondition("mid=:zz");
+			$criteria->params[':zz'] = $zz;
+		}
+		if($edu) {
+			$criteria->addCondition("edu=:edu");
+			$criteria->params[':edu'] = $edu;
 		}
 		if($ly) {
 			$criteria->addCondition("ly=:ly");
@@ -134,8 +144,8 @@ class ProductController extends ApiController
 			// var_dump(1);exit;
 			foreach ($times as $key => $value) {
 				$tmp['week'] = $value['week'];
-				$tmp['begin'] = $value['begin'];
-				$tmp['end'] = $value['end'];
+				$tmp['time_area'] = $value['begin'];
+				// $tmp['end'] = $value['end'];
 				$data['times'][] = $tmp;
 				unset($tmp);
 			}

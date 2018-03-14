@@ -10,6 +10,8 @@
  * @property string $username
  * @property string $price
  * @property integer $pid
+ * @property string $end
+ * @property string $begin
  * @property string $pname
  * @property string $note
  * @property integer $status
@@ -39,10 +41,10 @@ class Order extends CActiveRecord
 			array('uid, pid, status, deleted, created, updated', 'numerical', 'integerOnly'=>true),
 			array('phone', 'length', 'max'=>12),
 			array('username, pname, note', 'length', 'max'=>255),
-			array('price', 'length', 'max'=>100),
+			array('price, end, begin', 'length', 'max'=>100),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, uid, phone, username, price, pid, pname, note, status, deleted, created, updated', 'safe', 'on'=>'search'),
+			array('id, uid, phone, username, price, pid, end, begin, pname, note, status, deleted, created, updated', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -69,6 +71,8 @@ class Order extends CActiveRecord
 			'username' => 'Username',
 			'price' => 'Price',
 			'pid' => 'Pid',
+			'end' => 'End',
+			'begin' => 'Begin',
 			'pname' => 'Pname',
 			'note' => 'Note',
 			'status' => 'Status',
@@ -102,6 +106,8 @@ class Order extends CActiveRecord
 		$criteria->compare('username',$this->username,true);
 		$criteria->compare('price',$this->price,true);
 		$criteria->compare('pid',$this->pid);
+		$criteria->compare('end',$this->end,true);
+		$criteria->compare('begin',$this->begin,true);
 		$criteria->compare('pname',$this->pname,true);
 		$criteria->compare('note',$this->note,true);
 		$criteria->compare('status',$this->status);

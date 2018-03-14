@@ -79,9 +79,24 @@ class TagController extends ApiController{
 						['id'=>3,'name'=>'默认排序'],
 					];
 
+					$edu = [];
+					$edu['name'] = '学历';
+					$edu['filed'] = 'edu';
+					foreach (Yii::app()->params['edu'] as $key => $value) {
+						$edu['list'][] = ['id'=>$key,'name'=>$value];
+					}
+
+					$zz = [];
+					$zz['name'] = '资质';
+					$zz['filed'] = 'zz';
+					foreach (Yii::app()->params['zz'] as $key => $value) {
+						$zz['list'][] = ['id'=>$key,'name'=>$value];
+					}
+					// $edu['list'] = Yii::app()->;
+
 					$more = [];
 					$more['name'] = '更多';
-					$more['list'] = [$sfprice,$sort];
+					$more['list'] = [$sfprice,$edu,$zz,$sort];
 					return [$aveprice,$zcss,$more];
 				});
 				// var_dump($ots);exit;
