@@ -104,6 +104,7 @@ class ProductController extends ApiController
 					'content'=>Tools::u8_title_substr($value->content,60),
 					'place'=>$value->street_name,
 					'hits'=>$value->hits,
+					'pf'=>$value->pf,
 					'year'=>date('Y')-$value->work_year+1,
 					'zc'=>$value->zc?TagExt::model()->findByPk($value->zc)->name:'',
 					'ly'=>$value->ly?TagExt::model()->findByPk($value->ly)->name:'',
