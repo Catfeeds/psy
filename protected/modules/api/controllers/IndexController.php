@@ -235,6 +235,15 @@ class IndexController extends ApiController
         } 
     }
 
+    public function actionGetGrade($uid,$oid)
+    {
+        if($obj = GradeExt::model()->find("uid=$uid and oid=$oid")) {
+            $this->frame['data'] = ['num'=>$obj->num,'gradeName'=>$value->buser->name,'note'=>$value->note];
+        } else {
+            return $this->returnError('尚未评价');
+        }
+    }
+
     public function actionOrderList($uid='')
     {
         $user = UserExt::model()->findByPk($uid);
