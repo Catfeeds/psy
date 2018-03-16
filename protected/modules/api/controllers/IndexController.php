@@ -305,4 +305,53 @@ class IndexController extends ApiController
         $value->status=1;
         $value->save();
     }
+
+    public function actionGetTime($uid='')
+    {
+        $user = UserExt::model()->findByPk($uid);
+        $data = [];
+        $weekarray=array("一","二","三","四","五","六","日");
+       
+
+        if($times = $user->times) {
+            $weekarr = [];
+            foreach ($times as $key => $value) {
+                $weekarr[$value['week']][] = $value['begin'];
+            }
+            // $weekarr = array_unique($weekarr);
+             // 往后一周的日期
+            foreach (range(1, 7) as $key => $value) {
+                $daytime = time() + $value*86400;
+                $week = date('w',$daytime);
+                // 星期日
+                if($week==0) {
+                    $week = 7;
+                }
+                if(in_array($week, array_keys($weekarr))) {
+                    $tmp['day'] = date('m/d',$daytime);
+                    $tmp['week'] = '周'.$weekarray[$week];
+                    $timearrange = $weekarr[$week];
+                    $canusertime = [];
+                    foreach ($timearrange as $timearea) {
+                        $paramstime = Yii::app()->params['time_area'][$timearea];
+                        list($begintime,$endtime) = explode('-', $paramstime);
+                        foreach (range($begintime,$endtime) as $t) {
+                            $canusertime[] = $t;
+                        }
+                    }
+                    foreach (range(0, 24) as $t) {
+                        if(in_array($t, $canusertime)) {
+                            $list[] = ['time'=>$t,'can_use'=>1];
+                        } else {
+                            $list[] = ['time'=>$t,'can_use'=>0];
+                        }
+                    }
+                    $tmp['list'] = $list;
+                    $data[] = $tmp;
+                }
+
+            }
+        }
+        $this->frame['data'] = ['price'=>$user->price,'list'=>$data];
+    }
 }
