@@ -363,4 +363,13 @@ class IndexController extends ApiController
         }
         $this->frame['data'] = ['price'=>$user->price,'list'=>$data];
     }
+
+    public function actionSetPay($openid='',$price='',$body='预约支付')
+    {
+        $res = Yii::app()->wxPay->setPay($body,$price,$openid);
+        // var_dump($res);exit;
+        if($res) {
+            $this->frame['data'] = $res;
+        }
+    }
 }
