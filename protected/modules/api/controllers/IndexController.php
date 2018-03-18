@@ -63,12 +63,13 @@ class IndexController extends ApiController
             if($cont) {
                 $cont = json_decode($cont,true);
                 $openid = $cont['openid'];
-                $data = ['open_id'=>$cont['openid'],'session_key'=>$cont['session_key'],'uid'=>'','is_user'=>0];
+                $data = ['open_id'=>$cont['openid'],'session_key'=>$cont['session_key'],'uid'=>'','is_user'=>0,'phone'=>''];
                 if($openid) {
                     $user = UserExt::getUserByOpenId($openid);
                     if($user) {
                         $data['uid'] = $user->id;
                         $data['is_user'] = $user->is_jl;
+                        $data['phone'] = $user->phone;
                     }
                     echo json_encode($data);
                 }
