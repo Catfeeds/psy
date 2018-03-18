@@ -395,4 +395,58 @@ class IndexController extends ApiController
             $this->frame['data'] = $res;
         }
     }
+
+    public function actionXcxLogin()
+    {
+        if(Yii::app()->request->getIsPostRequest()) {
+            $phone = Yii::app()->request->getPost('phone','');
+            $openid = Yii::app()->request->getPost('openid','');
+            $name = Yii::app()->request->getPost('name','');
+            if(!$phone||!$openid) {
+                $this->returnError('参数错误');
+                return false;
+            }
+            if($phone) {
+                $user = UserExt::model()->find("phone='$phone'");
+            } elseif($openid) {
+                $user = UserExt::model()->find("openid='$openid'");
+            }
+        // $phone = '13861242596';
+            if($user) {
+                if($openid&&$user->openid!=$openid){
+                    $user->openid=$openid;
+                    $user->save();
+                }
+                
+            } else {
+                $user = new UserExt;
+                $user->phone = $phone;
+                $user->openid = $openid;
+                $user->name = $name?$name:$this->get_rand_str();
+                $user->status = 1;
+                // $user->is_true = 0;
+                $user->type = 1;
+                $user->pwd = md5('123456');
+                $user->save();
+
+                // $this->returnError('用户尚未登录');
+            }
+            $model = new ApiLoginForm();
+            $model->isapp = true;
+            $model->username = $user->phone;
+            $model->password = $user->pwd;
+            // $model->obj = $user->attributes
+            $model->login();
+            $this->staff = $user;
+            $data = [
+                'id'=>$this->staff->id,
+                'phone'=>$this->staff->phone,
+                'name'=>$this->staff->name,
+                'type'=>$this->staff->type,
+                // 'is_true'=>$this->staff->is_true,
+                // 'company_name'=>$this->staff->is_true==1?($this->staff->companyinfo?$this->staff->companyinfo->name:'独立经纪人'):'您尚未实名认证',
+            ];
+            $this->frame['data'] = $data;
+        }
+    }
 }
