@@ -63,11 +63,12 @@ class IndexController extends ApiController
             if($cont) {
                 $cont = json_decode($cont,true);
                 $openid = $cont['openid'];
-                $data = ['open_id'=>$cont['openid'],'session_key'=>$cont['session_key'],'uid'=>''];
+                $data = ['open_id'=>$cont['openid'],'session_key'=>$cont['session_key'],'uid'=>'','is_user'=>0];
                 if($openid) {
                     $user = UserExt::getUserByOpenId($openid);
                     if($user) {
                         $data['uid'] = $user->id;
+                        $data['is_user'] = $user->is_jl;
                     }
                     echo json_encode($data);
                 }
@@ -101,6 +102,7 @@ class IndexController extends ApiController
         } else {
             $obj = new UserExt;
             $obj->attributes = $data;
+            $obj->is_jl = 1;
             if($area = AreaExt::model()->find("name='".$data['pro']."'")) {
                 $data['area'] = $area->id;
             } else {
