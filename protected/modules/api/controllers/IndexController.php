@@ -96,7 +96,8 @@ class IndexController extends ApiController
             $this->returnError('参数错误');
         }
         if($user = UserExt::getUserByOpenId($data['openid'])){
-            $this->returnError('该用户已存在');
+            // $this->returnError('该用户已存在');
+            $obj = $user;
         } else {
             $obj = new UserExt;
             $obj->attributes = $data;
