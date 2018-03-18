@@ -356,6 +356,7 @@ class IndexController extends ApiController
                         }
                     }
                     $tmp['list'] = $list;
+                    unset($list);
                     $data[] = $tmp;
                 }
 
