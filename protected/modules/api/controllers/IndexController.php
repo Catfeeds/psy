@@ -26,6 +26,28 @@ class IndexController extends ApiController
         $this->frame['data'] = $data;
     }
 
+    public function actionDecode()
+    {
+        include_once "wxBizDataCrypt.php";
+        $appid = SiteExt::getAttr('qjpz','appid');
+        $sessionKey = $_POST['accessKey'];
+        $encryptedData = $_POST['encryptedData'];
+        $iv = $_POST['iv'];
+        $pc = new WXBizDataCrypt($appid, $sessionKey);
+        $errCode = $pc->decryptData($encryptedData, $iv, $data );
+
+        if ($errCode == 0) {
+            $data = json_decode($data,true);
+            $this->frame['data'] = $data['phoneNumber'];
+            echo $data['phoneNumber'];
+            Yii::app()->end();
+            // print($data . "\n");
+        } else {
+            echo '';
+            Yii::app()->end();
+        }
+    }
+
     public function actionGetOpenId($code='')
     {
         $appid=SiteExt::getAttr('qjpz','appid');
