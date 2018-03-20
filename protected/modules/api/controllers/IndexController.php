@@ -94,6 +94,7 @@ class IndexController extends ApiController
         $data['city'] = Yii::app()->request->getPost('city','');
         $data['pro'] = Yii::app()->request->getPost('pro','');
         $data['type'] = 1;
+        $data['is_jl'] = 1;
         if(!$data['openid']) {
             $this->returnError('参数错误');
         }
