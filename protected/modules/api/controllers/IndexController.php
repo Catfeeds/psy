@@ -94,7 +94,6 @@ class IndexController extends ApiController
         $data['city'] = Yii::app()->request->getPost('city','');
         $data['pro'] = Yii::app()->request->getPost('pro','');
         $data['type'] = 1;
-        $data['is_jl'] = 1;
         if(!$data['openid']) {
             $this->returnError('参数错误');
         }
@@ -103,30 +102,31 @@ class IndexController extends ApiController
             $obj = $user;
         } else {
             $obj = new UserExt;
-            $obj->attributes = $data;
-            $obj->is_jl = 1;
-            if($area = AreaExt::model()->find("name='".$data['pro']."'")) {
-                $data['area'] = $area->id;
-            } else {
-                $area = new AreaExt;
-                $area->name = $data['pro'];
-                $area->save();
-                $data['area'] = $area->id;
-            }
-            if($street = AreaExt::model()->find("name='".$data['city']."'")) {
-                $data['street'] = $street->id;
-            } else {
-                $street = new AreaExt;
-                $street->parent = $area->id;
-                $street->name = $data['city'];
-                $street->save();
-                $data['street'] = $street->id;
-            }
-            if(!$obj->save()) {
-                $this->returnError(current(current($obj->getErrors())));
-            } else {
-                $this->frame['data'] = $obj->id;
-            }
+            
+        }
+        $obj->attributes = $data;
+        $obj->is_jl = 1;
+        if($area = AreaExt::model()->find("name='".$data['pro']."'")) {
+            $data['area'] = $area->id;
+        } else {
+            $area = new AreaExt;
+            $area->name = $data['pro'];
+            $area->save();
+            $data['area'] = $area->id;
+        }
+        if($street = AreaExt::model()->find("name='".$data['city']."'")) {
+            $data['street'] = $street->id;
+        } else {
+            $street = new AreaExt;
+            $street->parent = $area->id;
+            $street->name = $data['city'];
+            $street->save();
+            $data['street'] = $street->id;
+        }
+        if(!$obj->save()) {
+            $this->returnError(current(current($obj->getErrors())));
+        } else {
+            $this->frame['data'] = $obj->id;
         }
 
     }
