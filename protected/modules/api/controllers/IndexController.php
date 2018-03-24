@@ -169,8 +169,8 @@ class IndexController extends ApiController
                     foreach ($times as $key => $value) {
                         $tm = new UserTimeExt;
                         $tm->uid = $data['uid'];
-                        $tm->week = substr($value, 0,1);
-                        $tm->begin = substr($value, 1,1);
+                        $tm->week = $value['week'];
+                        $tm->begin = $value['time_area'];
                         $tm->save();
                     }
                 }
