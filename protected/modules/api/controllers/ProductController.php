@@ -98,16 +98,28 @@ class ProductController extends ApiController
 		$pager = $ress->pagination;
 		if($infos) {
 			foreach ($infos as $key => $value) {
+				$tags = [];
+				if($value->zc) {
+					$tags[] = TagExt::model()->findByPk($value->zc)->name;
+				}
+				if($value->ly) {
+					$tags[] = TagExt::model()->findByPk($value->ly)->name;
+				}
+				if(!$value->zx_mode) {
+					$tags[] = '可线下咨询';
+				}
 				$data['list'][] = [
 					'id'=>$value->id,
 					'name'=>Tools::u8_title_substr($value->name,20),
-					'content'=>Tools::u8_title_substr($value->content,60),
+					'content'=>Tools::u8_title_substr(strip_tags($value->content),60),
 					'place'=>$value->street_name,
 					'hits'=>$value->hits,
 					'pf'=>$value->pf,
 					'year'=>date('Y')-$value->work_year+1,
-					'zc'=>$value->zc?TagExt::model()->findByPk($value->zc)->name:'',
-					'ly'=>$value->ly?TagExt::model()->findByPk($value->ly)->name:'',
+					'tags'=>$tags,
+					// ''
+					// 'zc'=>$value->zc?TagExt::model()->findByPk($value->zc)->name:'',
+					// 'ly'=>$value->ly?TagExt::model()->findByPk($value->ly)->name:'',
 					'zz'=>$value->mid?Yii::app()->params['zz'][$value->mid]:'',
 					'image'=>ImageTools::fixImage($value->image,370,250),
 				];
