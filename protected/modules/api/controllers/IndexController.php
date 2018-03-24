@@ -93,6 +93,8 @@ class IndexController extends ApiController
         $data['edu'] = Yii::app()->request->getPost('edu','');
         $data['city'] = Yii::app()->request->getPost('city','');
         $data['pro'] = Yii::app()->request->getPost('pro','');
+        $data['area'] = Yii::app()->request->getPost('area','');
+        $data['street'] = Yii::app()->request->getPost('street','');
         $data['type'] = 1;
         if(!$data['openid']) {
             $this->returnError('参数错误');
@@ -106,23 +108,24 @@ class IndexController extends ApiController
         }
         $obj->attributes = $data;
         $obj->is_jl = 1;
-        if($area = AreaExt::model()->find("name='".$data['pro']."'")) {
-            $data['area'] = $area->id;
-        } else {
-            $area = new AreaExt;
-            $area->name = $data['pro'];
-            $area->save();
-            $data['area'] = $area->id;
-        }
-        if($street = AreaExt::model()->find("name='".$data['city']."'")) {
-            $data['street'] = $street->id;
-        } else {
-            $street = new AreaExt;
-            $street->parent = $area->id;
-            $street->name = $data['city'];
-            $street->save();
-            $data['street'] = $street->id;
-        }
+        // $obj->area = 
+        // if($area = AreaExt::model()->find("name='".$data['pro']."'")) {
+        //     $data['area'] = $area->id;
+        // } else {
+        //     $area = new AreaExt;
+        //     $area->name = $data['pro'];
+        //     $area->save();
+        //     $data['area'] = $area->id;
+        // }
+        // if($street = AreaExt::model()->find("name='".$data['city']."'")) {
+        //     $data['street'] = $street->id;
+        // } else {
+        //     $street = new AreaExt;
+        //     $street->parent = $area->id;
+        //     $street->name = $data['city'];
+        //     $street->save();
+        //     $data['street'] = $street->id;
+        // }
         if(!$obj->save()) {
             $this->returnError(current(current($obj->getErrors())));
         } else {
