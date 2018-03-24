@@ -157,7 +157,7 @@ class IndexController extends ApiController
         if(!$data['uid']) {
             $this->returnError('参数错误');
         }
-        if($user = UserExt::model()->find("uid=".$data['uid']) && $user->type==2){
+        if($user = UserExt::model()->findByPk($data['uid']) && $user->type==2){
             $this->returnError('该用户已存在');
         } else {
             $obj = $user;
