@@ -116,6 +116,7 @@ class ProductController extends ApiController
 					'hits'=>$value->hits,
 					'pf'=>$value->pf,
 					'year'=>date('Y')-$value->work_year+1,
+					'tags'=>$tags,
 					// ''
 					// 'zc'=>$value->zc?TagExt::model()->findByPk($value->zc)->name:'',
 					// 'ly'=>$value->ly?TagExt::model()->findByPk($value->ly)->name:'',
