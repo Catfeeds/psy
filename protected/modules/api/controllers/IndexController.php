@@ -256,7 +256,7 @@ class IndexController extends ApiController
         $data['num'] = Yii::app()->request->getPost('num','');
         $data['note'] = Yii::app()->request->getPost('note','');
         $data['is_nm'] = Yii::app()->request->getPost('is_nm','');
-        if(!$data['uid'] || !$data['uid'] || !$data['num']) {
+        if(!$data['uid'] || !$data['oid'] || !is_numeric($data['num'])) {
             return $this->returnError('参数错误');
         }
         $order = new GradeExt;
