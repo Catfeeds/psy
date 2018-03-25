@@ -69,7 +69,7 @@ class IndexController extends ApiController
                     if($user) {
                         $data['uid'] = $user->id;
                         $data['is_user'] = $user->is_jl;
-                        $data['phone'] = $user->phone
+                        $data['phone'] = $user->phone;
                         $user->type==2 && $data['is_zxs'] = 1;
                     }
                     echo json_encode($data);
