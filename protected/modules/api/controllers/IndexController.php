@@ -241,6 +241,7 @@ class IndexController extends ApiController
                 $iuser = $value->user;
                 // $num += $value->price;
                 $data[] = [
+                    'id'=>$value->id,
                     'oid'=>$iuser->id,
                     'name'=>$iuser->name,
                     'phone'=>$iuser->phone,
