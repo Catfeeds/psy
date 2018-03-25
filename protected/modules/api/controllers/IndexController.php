@@ -238,6 +238,7 @@ class IndexController extends ApiController
                 $iuser = $value->user;
                 // $num += $value->price;
                 $data[] = [
+                    'oid'=>$iuser->id,
                     'name'=>$iuser->name,
                     'phone'=>$iuser->phone,
                     // 'price'=>$value->price,
@@ -297,6 +298,7 @@ class IndexController extends ApiController
                 $data[] = [
                     'id'=>$value->id,
                     'name'=>$iuser->name,
+                    'oid'=>$iuser->id,
                     'image'=>ImageTools::fixImage($iuser->image),
                     'phone'=>$iuser->phone,
                     'tags'=>$tags,
@@ -328,6 +330,7 @@ class IndexController extends ApiController
         $data = [
             'id'=>$id,
             'name'=>$iuser->name,
+            'oid'=>$iuser->id,
             'image'=>ImageTools::fixImage($iuser->image),
             'phone'=>$iuser->phone,
             'tags'=>$tags,
@@ -466,5 +469,10 @@ class IndexController extends ApiController
         $obj->uid = $uid;
         $obj->note = $note;
         $obj->save();
+    }
+
+    public function actionGetConfig()
+    {
+        $data = [];
     }
 }
