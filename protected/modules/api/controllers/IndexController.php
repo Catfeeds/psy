@@ -474,5 +474,7 @@ class IndexController extends ApiController
     public function actionGetConfig()
     {
         $data = [];
+        $data['phone'] = SiteExt::getAttr('qjpz','tel');
+        $this->frame['data'] = $data;
     }
 }
