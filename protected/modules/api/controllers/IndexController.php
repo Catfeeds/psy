@@ -459,4 +459,12 @@ class IndexController extends ApiController
             $this->frame['data'] = $data;
         }
     }
+
+    public function actionAddReport($uid='',$note='')
+    {
+        $obj = new ReportExt;
+        $obj->uid = $uid;
+        $obj->note = $note;
+        $obj->save();
+    }
 }
