@@ -293,6 +293,10 @@ class IndexController extends ApiController
                     $tags[] = TagExt::model()->findByPk($iuser['zc'])->name;
                 }
                 // $num += $value->price;
+                $pf = false;
+                if(GradeExt::model()->find("uid=$uid and oid=".$iuser->id)) {
+                    $pf = true;
+                }
                 $data[] = [
                     'id'=>$value->id,
                     'name'=>$iuser->name,
@@ -300,7 +304,7 @@ class IndexController extends ApiController
                     'phone'=>$iuser->phone,
                     'tags'=>$tags,
                     'price'=>$value->price,
-                    'status'=>OrderExt::$status[$value->status],
+                    'status'=>!$pf?OrderExt::$status[$value->status]:'已评分',
                     'day'=>date('Y-m-d',$value->begin),
                     'begin'=>date('H',$value->begin),
                     'end'=>date('H',$value->end),
