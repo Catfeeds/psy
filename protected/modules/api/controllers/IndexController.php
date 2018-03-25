@@ -63,13 +63,14 @@ class IndexController extends ApiController
             if($cont) {
                 $cont = json_decode($cont,true);
                 $openid = $cont['openid'];
-                $data = ['open_id'=>$cont['openid'],'session_key'=>$cont['session_key'],'uid'=>'','is_user'=>0,'phone'=>''];
+                $data = ['open_id'=>$cont['openid'],'session_key'=>$cont['session_key'],'uid'=>'','is_user'=>0,'phone'=>'','is_zxs'=>0];
                 if($openid) {
                     $user = UserExt::getUserByOpenId($openid);
                     if($user) {
                         $data['uid'] = $user->id;
                         $data['is_user'] = $user->is_jl;
                         $data['phone'] = $user->phone;
+                        $user->type==2 && $data['is_zxs'] = 1;
                     }
                     echo json_encode($data);
                 }
@@ -237,6 +238,7 @@ class IndexController extends ApiController
                 $iuser = $value->user;
                 // $num += $value->price;
                 $data[] = [
+                    'oid'=>$iuser->id,
                     'name'=>$iuser->name,
                     'phone'=>$iuser->phone,
                     // 'price'=>$value->price,
@@ -300,6 +302,7 @@ class IndexController extends ApiController
                 $data[] = [
                     'id'=>$value->id,
                     'name'=>$iuser->name,
+                    'oid'=>$iuser->id,
                     'image'=>ImageTools::fixImage($iuser->image),
                     'phone'=>$iuser->phone,
                     'tags'=>$tags,
@@ -331,6 +334,7 @@ class IndexController extends ApiController
         $data = [
             'id'=>$id,
             'name'=>$iuser->name,
+            'oid'=>$iuser->id,
             'image'=>ImageTools::fixImage($iuser->image),
             'phone'=>$iuser->phone,
             'tags'=>$tags,
@@ -461,5 +465,20 @@ class IndexController extends ApiController
             ];
             $this->frame['data'] = $data;
         }
+    }
+
+    public function actionAddReport($uid='',$note='')
+    {
+        $obj = new ReportExt;
+        $obj->uid = $uid;
+        $obj->note = $note;
+        $obj->save();
+    }
+
+    public function actionGetConfig()
+    {
+        $data = [];
+        $data['phone'] = SiteExt::getAttr('qjpz','tel');
+        $this->frame['data'] = $data;
     }
 }
