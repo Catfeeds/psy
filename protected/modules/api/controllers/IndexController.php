@@ -171,7 +171,7 @@ class IndexController extends ApiController
                     // var_dump(count($times));
                     foreach ($times as $key => $value) {
                         $tm = new UserTimeExt;
-                        $tm->uid = $data['uid'];
+                        $tm->uid = $obj->id;
                         $tm->week = $value['week'];
                         $tm->begin = $value['time_area'];
                         if(!$tm->save()) {
