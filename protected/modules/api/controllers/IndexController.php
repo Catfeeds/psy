@@ -241,6 +241,7 @@ class IndexController extends ApiController
                     'oid'=>$iuser->id,
                     'name'=>$iuser->name,
                     'phone'=>$iuser->phone,
+                    'status'=>GradeExt::model()->find("uid=$uid and oid=".$iuser->id)?'已评分':'',
                     // 'price'=>$value->price,
                     'begin'=>date('m-d H:i',$value->begin),
                     'end'=>date('m-d H:i',$value->end),
