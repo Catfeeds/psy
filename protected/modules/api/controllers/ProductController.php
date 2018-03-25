@@ -167,7 +167,7 @@ class ProductController extends ApiController
 			foreach ($comments as $key => $value) {
 				$thisuser = $value->user;
 				$tmp['username'] = $value->is_nm?'匿名':$thisuser->name;
-				$tmp['image'] = ImageTools::fixImage($value->is_nm?$SiteExt::getAttr('qjpz','usernopic'):$thisuser->image);
+				$tmp['image'] = ImageTools::fixImage($value->is_nm?SiteExt::getAttr('qjpz','usernopic'):$thisuser->image);
 				$tmp['note'] = $value['note'];
 				$tmp['time'] = date('Y-m-d',$value['updated']);
 				$data['comments'][] = $tmp;
