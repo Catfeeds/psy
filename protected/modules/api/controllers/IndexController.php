@@ -168,6 +168,7 @@ class IndexController extends ApiController
                 $this->returnError(current(current($obj->getErrors())));
             } else {
                 if($times) {
+                    var_dump(count($times));
                     foreach ($times as $key => $value) {
                         $tm = new UserTimeExt;
                         $tm->uid = $data['uid'];
