@@ -167,7 +167,7 @@ class IndexController extends ApiController
             if(!$obj->save()) {
                 $this->returnError(current(current($obj->getErrors())));
             } else {
-                if($times = json_decode($times)) {
+                if($times = json_decode($times,true)) {
                     // var_dump(count($times));
                     foreach ($times as $key => $value) {
                         $tm = new UserTimeExt;
