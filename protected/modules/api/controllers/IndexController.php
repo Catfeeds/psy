@@ -475,7 +475,7 @@ class IndexController extends ApiController
     {
         $obj = new ReportExt;
         $obj->uid = $uid;
-        $obj->note = $note;
+        $obj->reason = $note;
         $obj->save();
     }
 
