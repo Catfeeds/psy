@@ -173,7 +173,9 @@ class IndexController extends ApiController
                         $tm->uid = $data['uid'];
                         $tm->week = $value['week'];
                         $tm->begin = $value['time_area'];
-                        $tm->save();
+                        if(!$tm->save()) {
+                            return $this->returnError(current(current($tm->getErrors())));
+                        }
                     }
                 }
             }
