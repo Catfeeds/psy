@@ -327,10 +327,10 @@ class IndexController extends ApiController
         $this->frame['data'] = $data;
     }
 
-    public function actionOrderInfo($id='')
+    public function actionOrderInfo($id='',$uid='',$oid='')
     {
         $value = OrderExt::model()->findByPk($id);
-        $iuser = $value->product;
+        $iuser = UserExt::model()->findByPk($oid);
         $tags = [];
         $iuser['zx_mode']==0 && $tags[] = '可线下咨询';
         if($iuser['ly']) {
@@ -339,7 +339,7 @@ class IndexController extends ApiController
         if($iuser['zc']) {
             $tags[] = TagExt::model()->findByPk($iuser['zc'])->name;
         }
-        $gr = GradeExt::model()->find("oid=".$value->uid." and uid=".$iuser->id);
+        $gr = GradeExt::model()->find("oid=".$oid." and uid=".$uid);
         // var_dump("oid=".$iuser->id." and uid=".$value->uid);exit;
         // $num += $value->price;
         $data = [
