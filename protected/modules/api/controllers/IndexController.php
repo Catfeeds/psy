@@ -291,6 +291,9 @@ class IndexController extends ApiController
         if($infos) {
             foreach ($infos as $key => $value) {
                 $iuser = $value->product;
+                if(!$iuser)
+                    continue;
+                // var_dump($iuser['id']);exit;
                 $tags = [];
                 $iuser['zx_mode']==0 && $tags[] = '可线下咨询';
                 if($iuser['ly']) {
@@ -299,9 +302,10 @@ class IndexController extends ApiController
                 if($iuser['zc']) {
                     $tags[] = TagExt::model()->findByPk($iuser['zc'])->name;
                 }
+                 // var_dump($iuser['id']);exit;
                 // $num += $value->price;
                 $pf = false;
-                if(GradeExt::model()->find("uid=$uid and oid=".$iuser->id)) {
+                if(GradeExt::model()->find("uid=$uid and oid=".$iuser['id'])) {
                     $pf = true;
                 }
                 $data[] = [
