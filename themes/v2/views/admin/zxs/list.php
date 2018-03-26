@@ -54,7 +54,7 @@ $this->breadcrumbs = array($this->pageTitle);
             <td class="text-center"><?=$v->mid?Yii::app()->params['zz'][$v->mid]:'暂无'?></td>         
             <td class="text-center"><?=date('Y-m-d H:i:s',$v->created)?></td>
             <td class="text-center"><?=date('Y-m-d H:i:s',$v->updated)?></td>
-            <td class="text-center"><?php echo CHtml::ajaxLink(UserExt::$status[$v->status],$this->createUrl('changeStatus'), array('type'=>'get', 'data'=>array('id'=>$v->id,'class'=>get_class($v)),'success'=>'function(data){location.reload()}'), array('class'=>'btn btn-sm '.UserExt::$statusStyle[$v->status])); ?></td>
+            <td class="text-center"><?php echo CHtml::ajaxLink(UserExt::$status[$v->zxs_status],$this->createUrl('changeZxsStatus'), array('type'=>'get', 'data'=>array('id'=>$v->id,'class'=>get_class($v)),'success'=>'function(data){location.reload()}'), array('class'=>'btn btn-sm '.UserExt::$statusStyle[$v->zxs_status])); ?></td>
 
             <td style="text-align:center;vertical-align: middle">
                 <a href="<?php echo $this->createUrl('timeedit',array('id'=>$v->id,'referrer'=>Yii::app()->request->url)) ?>" class="btn default btn-xs blue"><i class="fa fa-edit"></i> 可用时间 </a>

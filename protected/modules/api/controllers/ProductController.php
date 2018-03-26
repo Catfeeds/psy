@@ -92,7 +92,7 @@ class ProductController extends ApiController
 			}
 			$criteria->addInCondition('id',$ids);
 		}
-		$criteria->addCondition('type=2');
+		$criteria->addCondition('type=2 and zxs_status=1');
 		$ress = UserExt::model()->normal()->getList($criteria,$limit);
 		$infos = $ress->data;
 		$pager = $ress->pagination;

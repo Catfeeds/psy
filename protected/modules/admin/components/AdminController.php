@@ -123,6 +123,7 @@ class AdminController extends Controller
         return [
             'del'=>$alias.'DelAction',
             'changeStatus'=>$alias.'ChangeStatusAction',
+            'changeZxsStatus'=>$alias.'ChangeZxsStatusAction',
             'setSort'=>$alias.'SetSortAction',
         ];
     }
