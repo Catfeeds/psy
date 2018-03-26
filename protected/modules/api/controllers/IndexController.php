@@ -349,7 +349,7 @@ class IndexController extends ApiController
             'oid'=>$iuser->id,
             'image'=>ImageTools::fixImage($iuser->image),
             'phone'=>$iuser->phone,
-            'note'=>$value->note,
+            'note'=>isset($gr->note)?$gr->note:'',
             'num'=>$gr?$gr->num:'',
             'tags'=>$tags,
             'price'=>$value->price,
