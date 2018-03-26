@@ -7,6 +7,7 @@
  * @property integer $id
  * @property integer $uid
  * @property integer $oid
+ * @property integer $order_id
  * @property string $note
  * @property integer $is_nm
  * @property integer $num
@@ -32,11 +33,11 @@ class Grade extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('oid, created', 'required'),
-			array('uid, oid, is_nm, num, created, updated', 'numerical', 'integerOnly'=>true),
+			array('uid, oid, order_id, is_nm, num, created, updated', 'numerical', 'integerOnly'=>true),
 			array('note', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, uid, oid, note, is_nm, num, created, updated', 'safe', 'on'=>'search'),
+			array('id, uid, oid, order_id, note, is_nm, num, created, updated', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -60,6 +61,7 @@ class Grade extends CActiveRecord
 			'id' => 'ID',
 			'uid' => 'Uid',
 			'oid' => 'Oid',
+			'order_id' => 'Order',
 			'note' => 'Note',
 			'is_nm' => 'Is Nm',
 			'num' => 'Num',
@@ -89,6 +91,7 @@ class Grade extends CActiveRecord
 		$criteria->compare('id',$this->id);
 		$criteria->compare('uid',$this->uid);
 		$criteria->compare('oid',$this->oid);
+		$criteria->compare('order_id',$this->order_id);
 		$criteria->compare('note',$this->note,true);
 		$criteria->compare('is_nm',$this->is_nm);
 		$criteria->compare('num',$this->num);

@@ -260,6 +260,7 @@ class IndexController extends ApiController
     {
         $data['uid'] = Yii::app()->request->getPost('uid',0);
         $data['oid'] = Yii::app()->request->getPost('oid',0);
+        $data['order_id'] = Yii::app()->request->getPost('order_id',0);
         $data['num'] = Yii::app()->request->getPost('num','');
         $data['note'] = Yii::app()->request->getPost('note','');
         $data['is_nm'] = Yii::app()->request->getPost('is_nm','');
@@ -305,7 +306,7 @@ class IndexController extends ApiController
                  // var_dump($iuser['id']);exit;
                 // $num += $value->price;
                 $pf = false;
-                if(GradeExt::model()->find("uid=$uid and oid=".$iuser['id'])) {
+                if(GradeExt::model()->find("uid=$uid and oid=".$iuser['id']." and order_id=".$value->id)) {
                     $pf = true;
                 }
                 $data[] = [
