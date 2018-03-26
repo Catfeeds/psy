@@ -339,7 +339,8 @@ class IndexController extends ApiController
         if($iuser['zc']) {
             $tags[] = TagExt::model()->findByPk($iuser['zc'])->name;
         }
-        $gr = GradeExt::model()->find("oid=".$iuser->id." and uid=".$value->uid);
+        $gr = GradeExt::model()->find("oid=".$value->uid." and uid=".$iuser->id);
+        // var_dump("oid=".$iuser->id." and uid=".$value->uid);exit;
         // $num += $value->price;
         $data = [
             'id'=>$id,
