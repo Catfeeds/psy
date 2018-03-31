@@ -495,4 +495,9 @@ class IndexController extends ApiController
         $data['phone'] = SiteExt::getAttr('qjpz','tel');
         $this->frame['data'] = $data;
     }
+
+    public function actionGetUserInfo($id)
+    {
+        $user = UserExt::model()->findByPk($id);
+    }
 }

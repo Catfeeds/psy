@@ -53,6 +53,7 @@ class UserExt extends User{
         $rules = parent::rules();
         return array_merge($rules, array(
             array('phone', 'unique', 'message'=>'{attribute}已存在'),
+            array('id_card', 'unique', 'message'=>'该身份证已存在'),
             array('phone', 'phonerule'),
         ));
     }
