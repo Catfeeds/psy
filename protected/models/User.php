@@ -9,6 +9,8 @@
  * @property string $wx
  * @property string $price_note
  * @property integer $hits
+ * @property string $id_pic_sec
+ * @property string $id_pic_main
  * @property double $pf
  * @property string $phone
  * @property string $true_name
@@ -71,14 +73,14 @@ class User extends CActiveRecord
 			array('name, created', 'required'),
 			array('hits, zxs_status, parent, is_jl, is_manage, qf_uid, pid, vip_expire, type, ly, zc, zx_mode, work_year, mid, street, area, edu, year, sex, status, deleted, sort, created, updated', 'numerical', 'integerOnly'=>true),
 			array('pf', 'numerical'),
-			array('pwd, price_note, true_name, id_pic, openid, company, place, ava, image', 'length', 'max'=>255),
+			array('pwd, price_note, id_pic_sec, id_pic_main, true_name, id_pic, openid, company, place, ava, image', 'length', 'max'=>255),
 			array('wx, name, city, pro, id_card, street_name, area_name', 'length', 'max'=>100),
 			array('phone', 'length', 'max'=>15),
 			array('price', 'length', 'max'=>10),
 			array('content', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, pwd, wx, price_note, hits, pf, phone, true_name, zxs_status, name, parent, is_jl, is_manage, id_pic, qf_uid, pid, city, pro, openid, vip_expire, company, type, price, ly, zc, place, zx_mode, work_year, mid, id_card, street_name, area_name, content, street, area, edu, year, ava, image, sex, status, deleted, sort, created, updated', 'safe', 'on'=>'search'),
+			array('id, pwd, wx, price_note, hits, id_pic_sec, id_pic_main, pf, phone, true_name, zxs_status, name, parent, is_jl, is_manage, id_pic, qf_uid, pid, city, pro, openid, vip_expire, company, type, price, ly, zc, place, zx_mode, work_year, mid, id_card, street_name, area_name, content, street, area, edu, year, ava, image, sex, status, deleted, sort, created, updated', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -104,6 +106,8 @@ class User extends CActiveRecord
 			'wx' => 'Wx',
 			'price_note' => 'Price Note',
 			'hits' => 'Hits',
+			'id_pic_sec' => 'Id Pic Sec',
+			'id_pic_main' => 'Id Pic Main',
 			'pf' => 'Pf',
 			'phone' => 'Phone',
 			'true_name' => 'True Name',
@@ -170,6 +174,8 @@ class User extends CActiveRecord
 		$criteria->compare('wx',$this->wx,true);
 		$criteria->compare('price_note',$this->price_note,true);
 		$criteria->compare('hits',$this->hits);
+		$criteria->compare('id_pic_sec',$this->id_pic_sec,true);
+		$criteria->compare('id_pic_main',$this->id_pic_main,true);
 		$criteria->compare('pf',$this->pf);
 		$criteria->compare('phone',$this->phone,true);
 		$criteria->compare('true_name',$this->true_name,true);

@@ -104,7 +104,59 @@ class TagController extends ApiController{
 				array_unshift($ots,$area);
             	$this->frame['data'] = $ots;
 				break;
-			
+			case 'old':
+				$area = [];
+				$area['name'] = '区域';
+				$area['filed'] = 'area';
+				$areas = CacheExt::gas('wap_all_area','AreaExt',0,'wap区域缓存',function (){
+		            $areas = AreaExt::model()->normal()->findAll(['condition'=>'parent=0','order'=>'sort asc']);
+		            $areas[0]['childArea'] = $areas[0]->childArea;
+		            return $this->addChild($areas);
+		        });
+            	$area['list'] = $areas;
+            	$ots = CacheExt::gas('wap_all_filters','AreaExt',0,'wap筛选标签缓存',function (){
+	            	$aveprice = [];
+					$aveprice['name'] = '模式';
+					$aveprice['filed'] = 'mode';
+					$aveprice['list'] = [['id'=>1,'name'=>'仅线上咨询'],['id'=>2,'name'=>'支持线上线下咨询']];
+					$sfprice = [];
+					$sfprice['name'] = '领域';
+					$sfprice['filed'] = 'ly';
+					$sfprice['list'] = Yii::app()->db->createCommand("select id,name from tag where status=1 and cate='ly' order by sort asc")->queryAll();
+					$zcss = [];
+					$zcss['name'] = '专长';
+					$zcss['filed'] = 'zc';
+					$zcss['list'] = Yii::app()->db->createCommand("select id,name from tag where status=1 and cate='zc' order by sort asc")->queryAll();
+					$sort = [];
+					$sort['name'] = '排序';
+					$sort['filed'] = 'sort';
+					$sort['list'] = [
+						['id'=>1,'name'=>'评分从高到低'],
+						['id'=>2,'name'=>'工作年限倒序'],
+						['id'=>3,'name'=>'默认排序'],
+					];
+					$edu = [];
+					$edu['name'] = '学历';
+					$edu['filed'] = 'edu';
+					foreach (Yii::app()->params['edu'] as $key => $value) {
+						$edu['list'][] = ['id'=>$key,'name'=>$value];
+					}
+					$zz = [];
+					$zz['name'] = '资质';
+					$zz['filed'] = 'zz';
+					foreach (Yii::app()->params['zz'] as $key => $value) {
+						$zz['list'][] = ['id'=>$key,'name'=>$value];
+					}
+					// $edu['list'] = Yii::app()->;
+					$more = [];
+					$more['name'] = '更多';
+					$more['list'] = [$sfprice,$edu,$zz,$sort];
+					return [$aveprice,$zcss,$more];
+				});
+				// var_dump($ots);exit;
+				array_unshift($ots,$area);
+            	$this->frame['data'] = $ots;
+				break;
 			default:
 				# code...
 				break;

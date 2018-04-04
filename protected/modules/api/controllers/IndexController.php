@@ -152,6 +152,9 @@ class IndexController extends ApiController
         $data['mid'] = Yii::app()->request->getPost('zz','');
         $data['edu'] = Yii::app()->request->getPost('edu','');
         $data['price'] = Yii::app()->request->getPost('price','');
+        $data['sex'] = Yii::app()->request->getPost('sex','1');
+        $data['id_pic_main'] = Yii::app()->request->getPost('id_pic_main','');
+        $data['id_pic_sec'] = Yii::app()->request->getPost('id_pic_sec','');
         $data['price_note'] = Yii::app()->request->getPost('price_note','');
         $times = Yii::app()->request->getPost('times','');
         $data['type'] = 2;
@@ -415,7 +418,7 @@ class IndexController extends ApiController
 
             }
         }
-        $this->frame['data'] = ['price'=>$user->price,'list'=>$data];
+        $this->frame['data'] = ['price'=>$user->price,'list'=>$data,'place'=>$user->place];
     }
 
     public function actionSetPay($openid='',$price='',$body='预约支付')
@@ -500,4 +503,25 @@ class IndexController extends ApiController
     {
         $user = UserExt::model()->findByPk($id);
     }
+
+    public function actionGetContact($uid='')
+    {
+        $user = UserExt::model()->findByPk($uid);
+        if($user) {
+            $this->frame['data'] = [
+                'name'=>$user->name,'phone'=>$user->phone,'wx'=>$user->wx
+            ];
+        }
+    }
+
+    public function actionCheckCanIn($uid='')
+    {
+        $user = UserExt::model()->findByPk($uid);
+        if($user) {
+            if($user->type==2) {
+                $this->returnError('您已是平台认证咨询师！');
+            }
+        }
+    }
+
 }

@@ -141,9 +141,14 @@ class ProductController extends ApiController
 		$data = $info->attributes;
 		$data['image'] && $data['image'] = ImageTools::fixImage($data['image']);
 		$tags = [];
-		$data['zx_mode']==0 && $tags[] = '可线下咨询';
+		// $data['zx_mode']==0 && 
+		$zx_mode = '线上咨询';
+		if($data['zx_mode']==0) {
+			$tags[] = '可线下咨询';
+			$zx_mode = '支持线上和线下咨询';
+		}
 		if($data['ly']) {
-			$tags[] = TagExt::model()->findByPk($data['ly'])->name;
+ 			$tags[] = TagExt::model()->findByPk($data['ly'])->name;
 		}
 		if($data['zc']) {
 			$tags[] = TagExt::model()->findByPk($data['zc'])->name;
@@ -151,6 +156,7 @@ class ProductController extends ApiController
 		$data['tags'] = $tags;
 		$data['mid'] && $data['zz'] = Yii::app()->params['zz'][$data['mid']];
 		$data['edu'] && $data['edu'] = Yii::app()->params['edu'][$data['edu']];
+		$data['sex'] && $data['sex'] = Yii::app()->params['sex'][$data['sex']];
 		$data['work_year'] = date('Y')-$data['work_year']+1;
 		$data['times'] = $data['comments'] = [];
 		if($times = $info->times) {
@@ -175,9 +181,10 @@ class ProductController extends ApiController
 			}
 		}
 		$nowdata = [];
-		foreach (['id','name','image','area_name','street_name','tags','zz','company','pf','hits','work_year','content','place','price_note','price','times','comments','phone'] as $key => $value) {
+		foreach (['id','name','image','area_name','street_name','tags','zz','company','pf','hits','work_year','content','place','price_note','price','times','comments','phone','sex'] as $key => $value) {
 			$nowdata[$value] = $data[$value];
 		}
+		$nowdata['zx_mode'] = $zx_mode;
 		$this->frame['data'] = $nowdata;
 	}
 
@@ -323,6 +330,16 @@ class ProductController extends ApiController
         $res = HttpHelper::getHttps($url);
         $data = json_decode($res['content'],true);
 		return $data['access_token'];
+    }
+
+    public function actionGetContact($uid='')
+    {
+    	$user = UserExt::model()->findByPk($uid);
+    	if($user) {
+    		$this->frame['data'] = [
+    			'name'=>$user->name,'phone'=>$user->phone,'wx'=>$user->wx
+    		];
+    	}
     }
 
 }
