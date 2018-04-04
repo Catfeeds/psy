@@ -46,7 +46,7 @@ class TagController extends ApiController{
 		switch ($cate) {
 			case 'plotFilter':
 				$area = [];
-				$area['name'] = '区域';
+				$area['name'] = '城市';
 				$area['filed'] = 'area';
 				$areas = CacheExt::gas('wap_all_area','AreaExt',0,'wap区域缓存',function (){
 		            $areas = AreaExt::model()->normal()->findAll(['condition'=>'parent=0','order'=>'sort asc']);
@@ -66,15 +66,16 @@ class TagController extends ApiController{
 					$sfprice['list'] = Yii::app()->db->createCommand("select id,name from tag where status=1 and cate='ly' order by sort asc")->queryAll();
 
 					$zcss = [];
-					$zcss['name'] = '专长';
-					$zcss['filed'] = 'zc';
-					$zcss['list'] = Yii::app()->db->createCommand("select id,name from tag where status=1 and cate='zc' order by sort asc")->queryAll();
+					$zcss['name'] = '价格';
+					$zcss['filed'] = 'price';
+					$zcss['list'] = Yii::app()->db->createCommand("select id,name from tag where status=1 and cate='price' order by sort asc")->queryAll();
 
 					$sort = [];
 					$sort['name'] = '排序';
 					$sort['filed'] = 'sort';
 					$sort['list'] = [
-						['id'=>1,'name'=>'评分从高到低'],
+						['id'=>4,'name'=>'热度倒序'],
+						['id'=>1,'name'=>'评分倒序'],
 						['id'=>2,'name'=>'工作年限倒序'],
 						['id'=>3,'name'=>'默认排序'],
 					];
@@ -96,8 +97,8 @@ class TagController extends ApiController{
 
 					$more = [];
 					$more['name'] = '更多';
-					$more['list'] = [$sfprice,$edu,$zz,$sort];
-					return [$aveprice,$zcss,$more];
+					$more['list'] = [$sort,$edu,$zz];
+					return [$sfprice,$zcss,$more];
 				});
 				// var_dump($ots);exit;
 				array_unshift($ots,$area);
