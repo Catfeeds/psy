@@ -152,7 +152,9 @@ class IndexController extends ApiController
         $data['mid'] = Yii::app()->request->getPost('zz','');
         $data['edu'] = Yii::app()->request->getPost('edu','');
         $data['price'] = Yii::app()->request->getPost('price','');
+        $data['wx'] = Yii::app()->request->getPost('wx','');
         $data['sex'] = Yii::app()->request->getPost('sex','1');
+        $data['is_edit'] = Yii::app()->request->getPost('is_edit','0');
         $data['id_pic_main'] = Yii::app()->request->getPost('id_pic_main','');
         $data['id_pic_sec'] = Yii::app()->request->getPost('id_pic_sec','');
         $data['price_note'] = Yii::app()->request->getPost('price_note','');
@@ -161,12 +163,13 @@ class IndexController extends ApiController
         if(!$data['uid']) {
             $this->returnError('参数错误');
         }
-        if(($user = UserExt::model()->findByPk($data['uid'])) && $user->type==2){
+        if(!$data['is_edit'] && ($user = UserExt::model()->findByPk($data['uid'])) && $user->type==2){
             $this->returnError('该用户已存在');
         } else {
             $obj = $user;
             unset($data['uid']);
             $obj->attributes = $data;
+            $data['is_edit'] && $obj->status = 0;
             if(!$obj->save()) {
                 $this->returnError(current(current($obj->getErrors())));
             } else {
@@ -499,9 +502,18 @@ class IndexController extends ApiController
         $this->frame['data'] = $data;
     }
 
-    public function actionGetUserInfo($id)
+    public function actionGetUserInfo($uid)
     {
-        $user = UserExt::model()->findByPk($id);
+        $user = UserExt::model()->findByPk($uid);
+        $data = [];
+        foreach (['name','image','id_card','company','work_year','area','street','zx_mode','content','place','ly','mid','edu','sex','id_pic_main','id_pic_sec','wx'] as $key => $value) {
+            $data[$value] = $user->$value;
+        }
+        $data['image'] && $data['image'] = ImageTools::fixImage($data['image']);
+        $data['id_pic_main'] && $data['id_pic_main'] = ImageTools::fixImage($data['id_pic_main']);
+        $data['id_pic_sec'] && $data['id_pic_sec'] = ImageTools::fixImage($data['id_pic_sec']);
+        $this->frame['data'] = $data;
+
     }
 
     public function actionGetContact($uid='')
@@ -521,6 +533,67 @@ class IndexController extends ApiController
             if($user->type==2) {
                 $this->returnError('您已是平台认证咨询师！');
             }
+        }
+    }
+
+    public function actionGetZxsTime($uid)
+    {
+        $user = UserExt::model()->findByPk($uid);
+        $data = [];
+        if($times = $user->times) {
+            // var_dump(1);exit;
+            foreach ($times as $key => $value) {
+                $tmp['week'] = $value['week'];
+                $tmp['time_area'] = $value['begin'];
+                // $tmp['end'] = $value['end'];
+                $data[] = $tmp;
+                // unset($tmp);
+            }
+        }
+        $this->frame['data'] = $data;
+    }
+
+    public function actionSetZxsTime()
+    {
+        if(Yii::app()->request->getIsPostRequest()) {
+            $uid = Yii::app()->request->getPost('uid',0);
+            if(!$uid) {
+                return $this->returnError('参数错误');
+            }
+            $times = Yii::app()->request->getPost('times','');
+            if($times = json_decode($times,true)) {
+                // var_dump(count($times));
+                foreach ($times as $key => $value) {
+                    $tm = new UserTimeExt;
+                    $tm->uid = $uid;
+                    $tm->week = $value['week'];
+                    $tm->begin = $value['time_area'];
+                    if(!$tm->save()) {
+                        return $this->returnError(current(current($tm->getErrors())));
+                    }
+                }
+            }
+        }
+    }
+
+    public function actionGetZxsPrice($uid)
+    {
+        $user = UserExt::model()->findByPk($uid);
+        $this->frame['data'] = $user->price;
+    }
+
+    public function actionSetZxsPrice()
+    {
+        if(Yii::app()->request->getIsPostRequest()) {
+            $uid = Yii::app()->request->getPost('uid',0);
+            if(!$uid) {
+                return $this->returnError('参数错误');
+            } else {
+                $user = UserExt::model()->findByPk($uid);
+            }
+            $price = Yii::app()->request->getPost('price','');
+            $user->price = $price;
+            $user->save();
         }
     }
 
