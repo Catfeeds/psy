@@ -509,6 +509,8 @@ class IndexController extends ApiController
         foreach (['name','image','id_card','company','work_year','area','street','zx_mode','content','place','ly','mid','edu','sex','id_pic_main','id_pic_sec','wx'] as $key => $value) {
             $data[$value] = $user->$value;
         }
+        // $data['zz'] = $data['mid'];
+        !$data['zx_mode'] && $data['zx_mode'] = 1;
         $data['image'] && $data['image'] = ImageTools::fixImage($data['image']);
         $data['id_pic_main'] && $data['id_pic_main'] = ImageTools::fixImage($data['id_pic_main']);
         $data['id_pic_sec'] && $data['id_pic_sec'] = ImageTools::fixImage($data['id_pic_sec']);
