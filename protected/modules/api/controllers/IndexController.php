@@ -166,6 +166,7 @@ class IndexController extends ApiController
         if(!$data['is_edit'] && ($user = UserExt::model()->findByPk($data['uid'])) && $user->type==2){
             $this->returnError('该用户已存在');
         } else {
+            $user = UserExt::model()->findByPk($data['uid']);
             $obj = $user;
             unset($data['uid']);
             $obj->attributes = $data;
