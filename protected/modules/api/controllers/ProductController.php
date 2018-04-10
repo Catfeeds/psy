@@ -174,6 +174,8 @@ class ProductController extends ApiController
 				if(!$value)
 					continue;
 				$thisuser = $value->user;
+				if(!$thisuser)
+					continue;
 				$tmp['username'] = $value->is_nm?'匿名':$thisuser->name;
 				$tmp['image'] = ImageTools::fixImage($value->is_nm?SiteExt::getAttr('qjpz','usernopic'):$thisuser->image);
 				$tmp['note'] = $value['note'];
