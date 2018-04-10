@@ -13,7 +13,7 @@ class TagController extends ApiController{
 	}
 	public function actionArea()
 	{
-		$this->frame['data'] = CacheExt::gas('wap_all_area','AreaExt',0,'wap区域缓存',function (){
+		$this->frame['data'] = CacheExt::gas('psy_area','AreaExt',0,'wap区域缓存',function (){
 		            $areas = AreaExt::model()->normal()->findAll(['condition'=>'parent=0','order'=>'sort asc']);
 		            $areas[0]['childArea'] = $areas[0]->childArea;
 		            return $this->addChild($areas);
@@ -21,7 +21,7 @@ class TagController extends ApiController{
 	}
 	public function actionPublishTags()
 	{
-		$areas = CacheExt::gas('wap_all_area','AreaExt',0,'wap区域缓存',function (){
+		$areas = CacheExt::gas('psy_area','AreaExt',0,'wap区域缓存',function (){
 		            $areas = AreaExt::model()->normal()->findAll(['condition'=>'parent=0','order'=>'sort asc']);
 		            $areas[0]['childArea'] = $areas[0]->childArea;
 		            return $this->addChild($areas);
@@ -48,13 +48,13 @@ class TagController extends ApiController{
 				$area = [];
 				$area['name'] = '城市';
 				$area['filed'] = 'area';
-				$areas = CacheExt::gas('wap_all_area','AreaExt',0,'wap区域缓存',function (){
+				$areas = CacheExt::gas('psy_area','AreaExt',0,'wap区域缓存',function (){
 		            $areas = AreaExt::model()->normal()->findAll(['condition'=>'parent=0','order'=>'sort asc']);
 		            $areas[0]['childArea'] = $areas[0]->childArea;
 		            return $this->addChild($areas);
 		        });
             	$area['list'] = $areas;
-            	$ots = CacheExt::gas('wap_all_filters','AreaExt',0,'wap筛选标签缓存',function (){
+            	$ots = CacheExt::gas('psy_all_filters','AreaExt',0,'wap筛选标签缓存',function (){
 	            	$aveprice = [];
 					$aveprice['name'] = '模式';
 					$aveprice['filed'] = 'mode';
@@ -108,13 +108,13 @@ class TagController extends ApiController{
 				$area = [];
 				$area['name'] = '区域';
 				$area['filed'] = 'area';
-				$areas = CacheExt::gas('wap_all_area','AreaExt',0,'wap区域缓存',function (){
+				$areas = CacheExt::gas('psy_area','AreaExt',0,'wap区域缓存',function (){
 		            $areas = AreaExt::model()->normal()->findAll(['condition'=>'parent=0','order'=>'sort asc']);
 		            $areas[0]['childArea'] = $areas[0]->childArea;
 		            return $this->addChild($areas);
 		        });
             	$area['list'] = $areas;
-            	$ots = CacheExt::gas('wap_all_filters','AreaExt',0,'wap筛选标签缓存',function (){
+            	$ots = CacheExt::gas('psy_all_filters','AreaExt',0,'wap筛选标签缓存',function (){
 	            	$aveprice = [];
 					$aveprice['name'] = '模式';
 					$aveprice['filed'] = 'mode';
