@@ -171,6 +171,8 @@ class ProductController extends ApiController
 		}
 		if($comments = $info->comments) {
 			foreach ($comments as $key => $value) {
+				if(!$value)
+					continue;
 				$thisuser = $value->user;
 				$tmp['username'] = $value->is_nm?'匿名':$thisuser->name;
 				$tmp['image'] = ImageTools::fixImage($value->is_nm?SiteExt::getAttr('qjpz','usernopic'):$thisuser->image);
