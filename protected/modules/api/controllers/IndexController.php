@@ -546,8 +546,8 @@ class IndexController extends ApiController
         if($times = $user->times) {
             // var_dump(1);exit;
             foreach ($times as $key => $value) {
-                $tmp['week'] = $value['week'];
-                $tmp['time_area'] = $value['begin'];
+                $tmp['week'] = $value['week']-1;
+                $tmp['time_area'] = $value['begin']-1;
                 // $tmp['end'] = $value['end'];
                 $data[] = $tmp;
                 // unset($tmp);
@@ -564,13 +564,14 @@ class IndexController extends ApiController
                 return $this->returnError('参数错误');
             }
             $times = Yii::app()->request->getPost('times','');
+            UserTimeExt::model()->deleteAllByAttributes(['uid'=>$uid]);
             if($times = json_decode($times,true)) {
                 // var_dump(count($times));
                 foreach ($times as $key => $value) {
                     $tm = new UserTimeExt;
                     $tm->uid = $uid;
-                    $tm->week = $value['week'];
-                    $tm->begin = $value['time_area'];
+                    $tm->week = $value['week']+1;
+                    $tm->begin = $value['time_area']+1;
                     if(!$tm->save()) {
                         return $this->returnError(current(current($tm->getErrors())));
                     }
