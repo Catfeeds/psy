@@ -54,7 +54,7 @@ class TagController extends ApiController{
 		            return $this->addChild($areas);
 		        });
             	$area['list'] = $areas;
-            	$ots = CacheExt::gas('psy_all_filters','AreaExt',0,'wap筛选标签缓存',function (){
+            	$ots = CacheExt::gas('psy_all_filters_new','AreaExt',0,'wap筛选标签缓存',function (){
 	            	$aveprice = [];
 					$aveprice['name'] = '模式';
 					$aveprice['filed'] = 'mode';

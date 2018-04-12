@@ -397,8 +397,9 @@ class IndexController extends ApiController
                     $week = 7;
                 }
                 if(in_array($week, array_keys($weekarr))) {
+                    // var_dump($week);exit;
                     $tmp['day'] = date('m/d',$daytime);
-                    $tmp['week'] = '周'.$weekarray[$week];
+                    $tmp['week'] = '周'.$weekarray[$week-1];
                     $timearrange = $weekarr[$week];
                     $canusertime = [];
                     foreach ($timearrange as $timearea) {

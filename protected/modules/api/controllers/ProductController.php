@@ -17,6 +17,7 @@ class ProductController extends ApiController
 		$street = (int)Yii::app()->request->getQuery('street',0);
 		$sort = (int)Yii::app()->request->getQuery('sort',0);
 		$page = (int)Yii::app()->request->getQuery('page',1);
+		$price = (int)Yii::app()->request->getQuery('price',0);
 		$limit = (int)Yii::app()->request->getQuery('limit',20);
 		$kw = $this->cleanXss(Yii::app()->request->getQuery('kw',''));
 		!$page && $page = 1;
@@ -29,6 +30,14 @@ class ProductController extends ApiController
 		if($cid) {
 			$criteria->addCondition("cid=:cid");
 			$criteria->params[':cid'] = $cid;
+		}
+		if($price) {
+			$priceres = TagExt::model()->findByPk($price);
+			if($priceres) {
+				$criteria->addCondition("price>=:min and price<=:max");
+				$criteria->params[':min'] = $priceres->min;
+				$criteria->params[':max'] = $priceres->max;
+			}
 		}
 		if($mode) {
 			$criteria->addCondition("zx_mode=:zx_mode");
