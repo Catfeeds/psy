@@ -75,6 +75,9 @@ class ProductController extends ApiController
 				case '2':
 					$criteria->order = 'work_year asc';
 					break;
+				case '4':
+					$criteria->order = 'hits dsc';
+					break;
 				default:
 					$criteria->order = 'sort desc,updated desc';
 					break;
