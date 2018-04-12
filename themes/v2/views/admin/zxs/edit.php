@@ -115,6 +115,13 @@ $childArea = $parent ? AreaExt::model()->getByParent($parent)->normal()->findAll
     <div class="col-md-2"><?php echo $form->error($article, 'price_note') ?></div>
 </div>
 <div class="form-group">
+    <label class="col-md-2 control-label">微信<span class="required" aria-required="true">*</span></label>
+    <div class="col-md-4">
+        <?php echo $form->textField($article, 'wx', array('class' => 'form-control')); ?>
+    </div>
+    <div class="col-md-2"><?php echo $form->error($article, 'wx') ?></div>
+</div>
+<div class="form-group">
     <label class="col-md-2 control-label">专长</label>
     <div class="col-md-4">
         <?php echo $form->dropDownList($article, 'zc',  CHtml::listData(TagExt::model()->findAll("cate='zc'"),'id','name'), array('class'=>'form-control select2','empty'=>'无')); ?>
@@ -140,6 +147,20 @@ $childArea = $parent ? AreaExt::model()->getByParent($parent)->normal()->findAll
     <div class="col-md-8">
         <?php $this->widget('FileUpload',array('model'=>$article,'attribute'=>'image','inputName'=>'img','width'=>400,'height'=>300)); ?>
         <span class="help-block">建议尺寸：430*230</span> 
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-md-2 control-label text-nowrap">身份证正面</label>
+    <div class="col-md-8">
+        <?php $this->widget('FileUpload',array('model'=>$article,'attribute'=>'id_pic_main','inputName'=>'img','width'=>400,'height'=>300)); ?>
+        <!-- <span class="help-block">建议尺寸：430*230</span>  -->
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-md-2 control-label text-nowrap">身份证反面</label>
+    <div class="col-md-8">
+        <?php $this->widget('FileUpload',array('model'=>$article,'attribute'=>'id_pic_sec','inputName'=>'img','width'=>400,'height'=>300)); ?>
+        <!-- <span class="help-block">建议尺寸：430*230</span>  -->
     </div>
 </div>
 <div class="form-group">
