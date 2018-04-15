@@ -87,6 +87,9 @@ class UserExt extends User{
         if($this->street && $streetInfo = $this->streetInfo) {
             $this->street_name = $streetInfo->name;
         }
+        if($this->zxs_status == 1) {
+            $this->status = 1;
+        }
         return parent::beforeValidate();
     }
 

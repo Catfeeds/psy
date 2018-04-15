@@ -170,7 +170,7 @@ class IndexController extends ApiController
             $obj = $user;
             unset($data['uid']);
             $obj->attributes = $data;
-            $data['is_edit'] && $obj->status = 0;
+            $data['is_edit'] && $obj->zxs_status = 0;
             if(!$obj->save()) {
                 $this->returnError(current(current($obj->getErrors())));
             } else {
