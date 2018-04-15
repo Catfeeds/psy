@@ -489,9 +489,11 @@ class IndexController extends ApiController
         }
     }
 
-    public function actionAddReport($uid='',$note='')
+    public function actionAddReport()
     {
         $obj = new ReportExt;
+        $uid = Yii::app()->request->getPost('uid','');
+        $note = Yii::app()->request->getPost('note','');
         $obj->uid = $uid;
         $obj->reason = $note;
         $obj->save();
