@@ -197,7 +197,7 @@ class ProductController extends ApiController
 			}
 		}
 		$nowdata = [];
-		foreach (['id','name','image','area_name','street_name','tags','zz','company','pf','hits','work_year','content','place','price_note','price','times','comments','phone','sex'] as $key => $value) {
+		foreach (['id','name','image','area_name','street_name','tags','zz','company','pf','hits','work_year','content','place','price_note','price','off_price','times','comments','phone','sex'] as $key => $value) {
 			$nowdata[$value] = $data[$value];
 		}
 		$nowdata['zx_mode'] = $zx_mode;

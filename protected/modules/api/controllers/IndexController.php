@@ -206,6 +206,7 @@ class IndexController extends ApiController
             $data['price'] = Yii::app()->request->getPost('price',0);
             $data['begin'] = Yii::app()->request->getPost('begin',0);
             $data['end'] = Yii::app()->request->getPost('end',0);
+            $data['onoroff'] = Yii::app()->request->getPost('onoroff',0);
             if(!$data['uid'] || !$data['pid'] || !$data['end']) {
                 return $this->returnError('参数错误');
             }
@@ -253,6 +254,7 @@ class IndexController extends ApiController
                     'name'=>$iuser->name,
                     'phone'=>$iuser->phone,
                     'status'=>GradeExt::model()->find("uid=$uid and oid=".$iuser->id)?'已评分':'',
+                    'onoroff'=>$value->onoroff==1?'线上咨询':'线下咨询',
                     // 'price'=>$value->price,
                     'begin'=>date('m-d H:i',$value->begin),
                     'end'=>date('m-d H:i',$value->end),
@@ -328,6 +330,7 @@ class IndexController extends ApiController
                     'day'=>date('Y-m-d',$value->begin),
                     'begin'=>date('H',$value->begin),
                     'end'=>date('H',$value->end),
+                    'onoroff'=>$value->onoroff==1?'线上咨询':'线下咨询',
                 ];
             }
         }
