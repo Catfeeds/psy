@@ -454,7 +454,7 @@ class IndexController extends ApiController
             }
         }
             
-        $this->frame['data'] = ['price'=>$user->price,'list'=>$data,'place'=>$user->place];
+        $this->frame['data'] = ['price'=>$user->price,'list'=>$data,'place'=>$user->place,'off_price'=>$user->off_price,'can_edit'=>$user->zx_mode?"0":"1"];
     }
 
     public function actionSetPay($openid='',$price='',$body='预约支付')
