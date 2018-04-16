@@ -378,6 +378,19 @@ class IndexController extends ApiController
     public function actionGetTime($uid='')
     {
         $user = UserExt::model()->findByPk($uid);
+        $outarr = [];
+        if($orders = OrderExt::model()->findAll("pid=$uid and status=0")) {
+            
+            foreach ($orders as $key => $value) {
+                $tmp2 = [
+                    'day'=>date('m/d',$value->begin),
+                    'begin'=>date('H',$value->begin),
+                    'end'=>date('H',$value->end),
+                ];
+                $outarr[] = $tmp2;
+                // var_dump($value->id,$tmp);exit;
+            }
+        }
         $data = [];
         $weekarray=array("一","二","三","四","五","六","日");
        
@@ -423,6 +436,21 @@ class IndexController extends ApiController
 
             }
         }
+        if($outarr && $data) {
+            foreach ($outarr as $o) {
+                foreach ($data as $k=> $d) {
+                    if($o['day'] == $d['day']) {
+                        $lst = range($o['begin'], $o['end']);
+                        foreach ($d['list'] as $k1=> $l) {
+                            if(in_array($l['time'], $lst)) {
+                                $data[$k]['list'][$k1]['can_use'] = 0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+            
         $this->frame['data'] = ['price'=>$user->price,'list'=>$data,'place'=>$user->place];
     }
 
@@ -586,7 +614,7 @@ class IndexController extends ApiController
     public function actionGetZxsPrice($uid)
     {
         $user = UserExt::model()->findByPk($uid);
-        $this->frame['data'] = $user->price;
+        $this->frame['data'] = ['price'=>$user->price,'off_price'=>$user->off_price];
     }
 
     public function actionSetZxsPrice()
@@ -600,6 +628,7 @@ class IndexController extends ApiController
             }
             $price = Yii::app()->request->getPost('price','');
             $user->price = $price;
+            $user->off_price = Yii::app()->request->getPost('off_price','');
             $user->save();
         }
     }

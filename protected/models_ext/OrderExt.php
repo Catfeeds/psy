@@ -49,6 +49,11 @@ class OrderExt extends Order{
         if(strstr($this->end,'-')) {
             $this->end = strtotime($this->end);
         }
+        if($this->end<$this->begin) {
+            $t = $this->begin;
+            $this->begin = $this->end;
+            $this->end = $t;
+        }
         if($this->getIsNewRecord())
             $this->created = $this->updated = time();
         else
