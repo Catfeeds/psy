@@ -174,7 +174,6 @@ class IndexController extends ApiController
             if(!$obj->save()) {
                 $this->returnError(current(current($obj->getErrors())));
             } else {
-                var_dump($lys);
                 // if($times = json_decode($times,true)) {
                 //     // var_dump(count($times));
                 //     foreach ($times as $key => $value) {
@@ -188,8 +187,8 @@ class IndexController extends ApiController
                 //     }
                 // }
                 UserTagExt::model()->deleteAllByAttributes(['uid'=>$obj->id]);
-                if($lys = json_decode($lys,true)) {
-                    var_dump($lys);exit;
+                if($lys = explode(',', $lys)) {
+                    // var_dump($lys);exit;
                     foreach ($lys as $key => $value) {
                         $tm = new UserTagExt;
                         $tm->uid = $obj->id;
