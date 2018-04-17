@@ -174,18 +174,19 @@ class IndexController extends ApiController
             if(!$obj->save()) {
                 $this->returnError(current(current($obj->getErrors())));
             } else {
-                if($times = json_decode($times,true)) {
-                    // var_dump(count($times));
-                    foreach ($times as $key => $value) {
-                        $tm = new UserTimeExt;
-                        $tm->uid = $obj->id;
-                        $tm->week = $value['week'];
-                        $tm->begin = $value['time_area'];
-                        if(!$tm->save()) {
-                            return $this->returnError(current(current($tm->getErrors())));
-                        }
-                    }
-                }
+                var_dump($lys);
+                // if($times = json_decode($times,true)) {
+                //     // var_dump(count($times));
+                //     foreach ($times as $key => $value) {
+                //         $tm = new UserTimeExt;
+                //         $tm->uid = $obj->id;
+                //         $tm->week = $value['week'];
+                //         $tm->begin = $value['time_area'];
+                //         if(!$tm->save()) {
+                //             return $this->returnError(current(current($tm->getErrors())));
+                //         }
+                //     }
+                // }
                 UserTagExt::model()->deleteAllByAttributes(['uid'=>$obj->id]);
                 if($lys = json_decode($lys,true)) {
                     var_dump($lys);exit;
