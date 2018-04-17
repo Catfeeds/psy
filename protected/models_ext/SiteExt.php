@@ -23,7 +23,8 @@ class SiteExt extends Site{
         'boss_name'=>'',
         'productnotice'=>'',
         'sitecolor'=>'',
-        'sitename'=>''
+        'sitename'=>'',
+        'temid'=>'',
     ];
     public static $cateName = [
         'qjpz' => '全局配置',
@@ -39,6 +40,7 @@ class SiteExt extends Site{
             'usernopic'=>['type'=>'image','max'=>1,'name'=>'默认用户头像'],
             'appid'=>['type'=>'text','name'=>'appid'],
             'apps'=>['type'=>'text','name'=>'appsecret'],
+            'temid'=>['type'=>'text','name'=>'模板ID'],
             'mch_id'=>['type'=>'text','name'=>'商户ID'],
             'mch_key'=>['type'=>'text','name'=>'商户支付key'],
             'tel'=>['type'=>'text','name'=>'站点电话'],

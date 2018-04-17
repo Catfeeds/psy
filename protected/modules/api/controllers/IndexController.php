@@ -219,6 +219,7 @@ class IndexController extends ApiController
             $data['price'] = Yii::app()->request->getPost('price',0);
             $data['begin'] = Yii::app()->request->getPost('begin',0);
             $data['end'] = Yii::app()->request->getPost('end',0);
+            $form_id = Yii::app()->request->getPost('form_id',0);
             $data['onoroff'] = Yii::app()->request->getPost('onoroff',0);
             if(!$data['uid'] || !$data['pid'] || !$data['end']) {
                 return $this->returnError('参数错误');
@@ -227,7 +228,10 @@ class IndexController extends ApiController
             $order->attributes = $data;
             if(!$order->save()) {
                 $this->returnError(current(current($order->getErrors())));
-            } 
+            } elseif($form_id) {
+                $userit = UserExt::model()->findByPk($data['pid']);
+                $this->sendMsg($form_id,$userit->openid,date("Y-m-d",$order->created),$data['onoroff']==1?'线上咨询':'线下咨询',$data['begin'],UserExt::model()->findByPk($data['uid'])->name);
+            }
         }
     }
 
@@ -654,6 +658,79 @@ class IndexController extends ApiController
             $user->off_price = Yii::app()->request->getPost('off_price','');
             $user->save();
         }
+    }
+
+    public function sendMsg($form_id='',$openid='',$k1='',$k2='',$k3='',$k4='')
+    {
+        if($token = $this->getAt()) {
+            // $openid = SiteExt::getAttr('qjpz','openid');
+            $temid = SiteExt::getAttr('qjpz','temid');
+            if($openid&&$temid) {
+                // $token = $this->getAT();
+                $data['touser'] = $openid;
+                $data['template_id'] = $temid;
+                $data['form_id'] = $form_id;
+                $data['page'] = '';
+                $data['data']['keyword1']['color'] = '';
+                $data['data']['keyword2']['color'] = '';
+                $data['data']['keyword3']['color'] = '';
+                $data['data']['keyword4']['color'] = '';
+                $data['data']['keyword1']['value'] = $k1;
+                $data['data']['keyword2']['value'] = $k2;
+                $data['data']['keyword3']['value'] = $k3;
+                $data['data']['keyword4']['value'] = $k4;
+                $data['emphasis_keyword'] = '';
+                $posturl = "https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=$token";
+                // var_dump($posturl,$data);exit;
+                // Yii::log($posturl);
+                // Yii::log(json_encode($data));
+                $res = json_decode(HttpHelper::vpost($posturl,json_encode($data)),true);
+                Yii::log(json_encode($res));
+                // $this->frame['data'] = $res['content'];
+            }
+        }
+    }
+
+    public function getAT()
+    {
+        // $appid=SiteExt::getAttr('qjpz','appid');
+     //    $apps=SiteExt::getAttr('qjpz','apps');
+     //    if(!$appid||!$apps) {
+     //        return '';
+     //    }
+     //    $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=$appid&secret=$apps";
+     //    $res = HttpHelper::getHttps($url);
+     //    if($res&&$res['content']) {
+     //        $data = json_decode($res['content'],true);
+     //        return $data['access_token'];
+     //    }
+        $data = Yii::app()->cache->get('accToken') ? Yii::app()->cache->get('accToken') : (object)array('expire_time'=>0,'data'=>'');
+        $ticket = '';
+        if ($data->expire_time < time()) {
+            $accessToken = $this->getATNow();
+            Yii::log($accessToken);
+            if($accessToken) {
+                $data->expire_time = time() + 7000;
+                $ticket = $data->data = $accessToken;
+                Yii::app()->cache->set('accToken', $data, 7000);
+            }
+        } else {
+            $ticket = $data->data;
+        }
+        return $ticket;
+    }
+
+    public function getATNow()
+    {
+        $appid=SiteExt::getAttr('qjpz','appid');
+        $apps=SiteExt::getAttr('qjpz','apps');
+        if(!$appid||!$apps) {
+            return '';
+        }
+        $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=$appid&secret=$apps";
+        $res = HttpHelper::getHttps($url);
+        $data = json_decode($res['content'],true);
+        return $data['access_token'];
     }
 
 }
