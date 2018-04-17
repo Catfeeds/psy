@@ -452,6 +452,7 @@ class IndexController extends ApiController
 
             }
         }
+        // var_dump($outarr);exit();
         if($outarr && $data) {
             foreach ($outarr as $o) {
                 foreach ($data as $k=> $d) {
@@ -554,7 +555,7 @@ class IndexController extends ApiController
     {
         $user = UserExt::model()->findByPk($uid);
         $data = [];
-        foreach (['name','image','id_card','company','work_year','area','street','zx_mode','content','place','ly','mid','edu','sex','id_pic_main','id_pic_sec','wx'] as $key => $value) {
+        foreach (['name','image','id_card','company','work_year','area','street','zx_mode','content','place','mid','edu','sex','id_pic_main','id_pic_sec','wx'] as $key => $value) {
             $data[$value] = $user->$value;
         }
         // $data['zz'] = $data['mid'];
@@ -562,6 +563,12 @@ class IndexController extends ApiController
         $data['image'] && $data['image'] = ImageTools::fixImage($data['image']);
         $data['id_pic_main'] && $data['id_pic_main'] = ImageTools::fixImage($data['id_pic_main']);
         $data['id_pic_sec'] && $data['id_pic_sec'] = ImageTools::fixImage($data['id_pic_sec']);
+        $data['ly'] = [];
+        if($tags = $user->tags) {
+            foreach ($tags as $key => $value) {
+                $data['ly'][] = $value['tid'];
+            }
+        }
         $this->frame['data'] = $data;
 
     }
