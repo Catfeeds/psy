@@ -55,9 +55,17 @@ class ProductController extends ApiController
 			$criteria->addCondition("edu=:edu");
 			$criteria->params[':edu'] = $edu;
 		}
+		$ids = [];
 		if($ly) {
-			$criteria->addCondition("ly=:ly");
-			$criteria->params[':ly'] = $ly;
+			$saeids = Yii::app()->db->createCommand("select uid from tag where tid=$ly")->queryAll();
+			if($saeids) {
+				foreach ($saeids as $key => $value) {
+					$ids[] = $value['uid'];
+				}
+			}
+			$criteria->addInCondition('id',$ids);
+			// $criteria->addCondition("ly=:ly");
+			// $criteria->params[':ly'] = $ly;
 		}
 		if($area) {
 			$criteria->addCondition("area=:area");
@@ -85,7 +93,7 @@ class ProductController extends ApiController
 		}
 
 		if($save&&$uid) {
-			$ids = [];
+			
 			$saeids = Yii::app()->db->createCommand("select pid from save where uid=$uid")->queryAll();
 			if($saeids) {
 				foreach ($saeids as $key => $value) {
@@ -95,7 +103,7 @@ class ProductController extends ApiController
 			$criteria->addInCondition('id',$ids);
 		}
 		if($order&&$uid) {
-			$ids = [];
+			
 			$saeids = Yii::app()->db->createCommand("select pid from `order` where uid=$uid")->queryAll();
 			if($saeids) {
 				foreach ($saeids as $key => $value) {
@@ -114,8 +122,8 @@ class ProductController extends ApiController
 				if($value->zc) {
 					$tags[] = TagExt::model()->findByPk($value->zc)->name;
 				}
-				if($value->ly) {
-					$tags[] = TagExt::model()->findByPk($value->ly)->name;
+				if($tagsss = $value->tags) {
+					$tags[] = TagExt::model()->findByPk($tagsss[0]->tid)->name;
 				}
 				if(!$value->zx_mode) {
 					$tags[] = '可线下咨询';
@@ -159,12 +167,14 @@ class ProductController extends ApiController
 			$tags[] = '可线下咨询';
 			$zx_mode = '支持线上和线下咨询';
 		}
-		if($data['ly']) {
- 			$tags[] = TagExt::model()->findByPk($data['ly'])->name;
+		if($tagsss = $info->tags) {
+			foreach ($tagsss as $key => $value) {
+				$tags[] = $value->tag->name;
+			}
 		}
-		if($data['zc']) {
-			$tags[] = TagExt::model()->findByPk($data['zc'])->name;
-		}
+		// if($data['zc']) {
+		// 	$tags[] = TagExt::model()->findByPk($data['zc'])->name;
+		// }
 		$data['tags'] = $tags;
 		$data['mid'] && $data['zz'] = Yii::app()->params['zz'][$data['mid']];
 		$data['edu'] && $data['edu'] = Yii::app()->params['edu'][$data['edu']];

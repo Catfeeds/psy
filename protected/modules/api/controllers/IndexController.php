@@ -147,7 +147,7 @@ class IndexController extends ApiController
         $data['zx_mode'] = Yii::app()->request->getPost('mode','');
         $data['content'] = Yii::app()->request->getPost('content','');
         $data['place'] = Yii::app()->request->getPost('place','');
-        $data['ly'] = Yii::app()->request->getPost('ly','');
+        $lys = Yii::app()->request->getPost('ly','');
         $data['zc'] = Yii::app()->request->getPost('zc','');
         $data['mid'] = Yii::app()->request->getPost('zz','');
         $data['edu'] = Yii::app()->request->getPost('edu','');
@@ -186,6 +186,19 @@ class IndexController extends ApiController
                         }
                     }
                 }
+                UserTagExt::model()->deleteAllByAttributes(['uid'=>$obj->id]);
+                if($lys = json_decode($lys,true)) {
+                    // var_dump(count($times));
+                    foreach ($lys as $key => $value) {
+                        $tm = new UserTagExt;
+                        $tm->uid = $obj->id;
+                        $tm->tid = $value;
+                        if(!$tm->save()) {
+                            return $this->returnError(current(current($tm->getErrors())));
+                        }
+                    }
+                }
+
             }
         }
     }

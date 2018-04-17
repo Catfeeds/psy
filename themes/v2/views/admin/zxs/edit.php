@@ -128,7 +128,7 @@ $childArea = $parent ? AreaExt::model()->getByParent($parent)->normal()->findAll
     </div>
     <div class="col-md-2"><?php echo $form->error($article, 'wx') ?></div>
 </div>
-<div class="form-group">
+<!-- <div class="form-group">
     <label class="col-md-2 control-label">专长</label>
     <div class="col-md-4">
         <?php echo $form->dropDownList($article, 'zc',  CHtml::listData(TagExt::model()->findAll("cate='zc'"),'id','name'), array('class'=>'form-control select2','empty'=>'无')); ?>
@@ -141,7 +141,7 @@ $childArea = $parent ? AreaExt::model()->getByParent($parent)->normal()->findAll
         <?php echo $form->dropDownList($article, 'ly',  CHtml::listData(TagExt::model()->findAll("cate='ly'"),'id','name'), array('class'=>'form-control select2','empty'=>'无')); ?>
     </div>
     <div class="col-md-2"><?php echo $form->error($article, 'ly') ?></div>
-</div>
+</div> -->
 <div class="form-group">
     <label class="col-md-2 control-label">个人简介</label>
     <div class="col-md-8">
