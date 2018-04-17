@@ -188,7 +188,7 @@ class IndexController extends ApiController
                 }
                 UserTagExt::model()->deleteAllByAttributes(['uid'=>$obj->id]);
                 if($lys = json_decode($lys,true)) {
-                    // var_dump(count($times));
+                    var_dump($lys);exit;
                     foreach ($lys as $key => $value) {
                         $tm = new UserTagExt;
                         $tm->uid = $obj->id;
