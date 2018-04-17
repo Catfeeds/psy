@@ -118,7 +118,7 @@ class TagController extends ApiController{
 	            	$aveprice = [];
 					$aveprice['name'] = '模式';
 					$aveprice['filed'] = 'mode';
-					$aveprice['list'] = [['id'=>1,'name'=>'仅线上咨询'],['id'=>2,'name'=>'支持线上线下咨询']];
+					$aveprice['list'] = [['id'=>0,'name'=>'请选择咨询模式'],['id'=>1,'name'=>'仅线上咨询'],['id'=>2,'name'=>'支持线上线下咨询']];
 					$sfprice = [];
 					$sfprice['name'] = '领域';
 					$sfprice['filed'] = 'ly';
@@ -138,12 +138,14 @@ class TagController extends ApiController{
 					$edu = [];
 					$edu['name'] = '学历';
 					$edu['filed'] = 'edu';
+					$edu['list'][] = ['id'=>0,'name'=>'请选择学历'];
 					foreach (Yii::app()->params['edu'] as $key => $value) {
 						$edu['list'][] = ['id'=>$key,'name'=>$value];
 					}
 					$zz = [];
 					$zz['name'] = '资质';
 					$zz['filed'] = 'zz';
+					$zz['list'][] = ['id'=>0,'name'=>'请选择资质'];
 					foreach (Yii::app()->params['zz'] as $key => $value) {
 						$zz['list'][] = ['id'=>$key,'name'=>$value];
 					}
