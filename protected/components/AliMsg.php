@@ -34,8 +34,8 @@ class AliMsg
     public function __construct()
     {
 
-        $accessKeyId = 'LTAIFkPYjvzZziLB';
-        $accessKeySecret = '7CHZPrIr31QIlEh27yHfNS7qCoukoF';
+        $accessKeyId = 'LTAIvMJ5lKAoIXKZ';
+        $accessKeySecret = 'z6roAtGJONl8Y8IfbM5arompQMDNPT';
         // 短信API产品名
         $product = "Dysmsapi";
 

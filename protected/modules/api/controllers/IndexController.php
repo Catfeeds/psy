@@ -230,7 +230,9 @@ class IndexController extends ApiController
                 $this->returnError(current(current($order->getErrors())));
             } elseif($form_id) {
                 $userit = UserExt::model()->findByPk($data['pid']);
-                $this->sendMsg($form_id,$userit->openid,date("Y-m-d",$order->created),$data['onoroff']==1?'线上咨询':'线下咨询',$data['begin'],UserExt::model()->findByPk($data['uid'])->name);
+                $userut = UserExt::model()->findByPk($data['uid']);
+                SmsExt::sendMsg('支付成功',$userut->phone,['name'=>$userut->name,'time'=>$data['begin']]);
+               
             }
         }
     }
