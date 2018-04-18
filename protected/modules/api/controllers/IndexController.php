@@ -151,7 +151,9 @@ class IndexController extends ApiController
         $data['zc'] = Yii::app()->request->getPost('zc','');
         $data['mid'] = Yii::app()->request->getPost('zz','');
         $data['edu'] = Yii::app()->request->getPost('edu','');
-        $data['price'] = Yii::app()->request->getPost('price','');
+        // $data['price'] = Yii::app()->request->getPost('price','');
+        $data['bank_no'] = Yii::app()->request->getPost('bank_no','');
+        $data['bank_name'] = Yii::app()->request->getPost('bank_name','');
         $data['wx'] = Yii::app()->request->getPost('wx','');
         $data['sex'] = Yii::app()->request->getPost('sex','1');
         $data['is_edit'] = Yii::app()->request->getPost('is_edit','0');
@@ -562,7 +564,7 @@ class IndexController extends ApiController
     {
         $user = UserExt::model()->findByPk($uid);
         $data = [];
-        foreach (['name','image','id_card','company','work_year','area','street','zx_mode','content','place','mid','edu','sex','id_pic_main','id_pic_sec','wx'] as $key => $value) {
+        foreach (['name','image','id_card','company','work_year','area','street','zx_mode','content','place','mid','edu','sex','id_pic_main','bank_no','bank_name','id_pic_sec','wx'] as $key => $value) {
             $data[$value] = $user->$value;
         }
         // $data['zz'] = $data['mid'];

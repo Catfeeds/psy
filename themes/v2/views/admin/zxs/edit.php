@@ -39,6 +39,20 @@ $childArea = $parent ? AreaExt::model()->getByParent($parent)->normal()->findAll
     <div class="col-md-2"><?php echo $form->error($article, 'id_card') ?></div>
 </div>
 <div class="form-group">
+    <label class="col-md-2 control-label">银行卡号<span class="required" aria-required="true">*</span></label>
+    <div class="col-md-4">
+        <?php echo $form->textField($article, 'bank_no', array('class' => 'form-control')); ?>
+    </div>
+    <div class="col-md-2"><?php echo $form->error($article, 'bank_no') ?></div>
+</div>
+<div class="form-group">
+    <label class="col-md-2 control-label">开户银行<span class="required" aria-required="true">*</span></label>
+    <div class="col-md-4">
+        <?php echo $form->textField($article, 'bank_name', array('class' => 'form-control')); ?>
+    </div>
+    <div class="col-md-2"><?php echo $form->error($article, 'bank_name') ?></div>
+</div>
+<div class="form-group">
     <label class="col-md-2 control-label">机构<span class="required" aria-required="true">*</span></label>
     <div class="col-md-4">
         <?php echo $form->textField($article, 'company', array('class' => 'form-control')); ?>

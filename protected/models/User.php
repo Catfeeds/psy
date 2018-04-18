@@ -15,6 +15,8 @@
  * @property string $phone
  * @property string $true_name
  * @property integer $zxs_status
+ * @property string $bank_name
+ * @property string $bank_no
  * @property string $off_price
  * @property string $name
  * @property integer $parent
@@ -75,13 +77,13 @@ class User extends CActiveRecord
 			array('hits, zxs_status, parent, is_jl, is_manage, qf_uid, pid, vip_expire, type, ly, zc, zx_mode, work_year, mid, street, area, edu, year, sex, status, deleted, sort, created, updated', 'numerical', 'integerOnly'=>true),
 			array('pf', 'numerical'),
 			array('pwd, price_note, id_pic_sec, id_pic_main, true_name, id_pic, openid, company, place, ava, image', 'length', 'max'=>255),
-			array('wx, off_price, name, city, pro, id_card, street_name, area_name', 'length', 'max'=>100),
+			array('wx, bank_name, bank_no, off_price, name, city, pro, id_card, street_name, area_name', 'length', 'max'=>100),
 			array('phone', 'length', 'max'=>15),
 			array('price', 'length', 'max'=>10),
 			array('content', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, pwd, wx, price_note, hits, id_pic_sec, id_pic_main, pf, phone, true_name, zxs_status, off_price, name, parent, is_jl, is_manage, id_pic, qf_uid, pid, city, pro, openid, vip_expire, company, type, price, ly, zc, place, zx_mode, work_year, mid, id_card, street_name, area_name, content, street, area, edu, year, ava, image, sex, status, deleted, sort, created, updated', 'safe', 'on'=>'search'),
+			array('id, pwd, wx, price_note, hits, id_pic_sec, id_pic_main, pf, phone, true_name, zxs_status, bank_name, bank_no, off_price, name, parent, is_jl, is_manage, id_pic, qf_uid, pid, city, pro, openid, vip_expire, company, type, price, ly, zc, place, zx_mode, work_year, mid, id_card, street_name, area_name, content, street, area, edu, year, ava, image, sex, status, deleted, sort, created, updated', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -113,6 +115,8 @@ class User extends CActiveRecord
 			'phone' => 'Phone',
 			'true_name' => 'True Name',
 			'zxs_status' => 'Zxs Status',
+			'bank_name' => 'Bank Name',
+			'bank_no' => 'Bank No',
 			'off_price' => 'Off Price',
 			'name' => 'Name',
 			'parent' => 'Parent',
@@ -182,6 +186,8 @@ class User extends CActiveRecord
 		$criteria->compare('phone',$this->phone,true);
 		$criteria->compare('true_name',$this->true_name,true);
 		$criteria->compare('zxs_status',$this->zxs_status);
+		$criteria->compare('bank_name',$this->bank_name,true);
+		$criteria->compare('bank_no',$this->bank_no,true);
 		$criteria->compare('off_price',$this->off_price,true);
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('parent',$this->parent);
