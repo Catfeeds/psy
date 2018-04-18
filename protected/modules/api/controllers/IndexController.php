@@ -231,7 +231,7 @@ class IndexController extends ApiController
             } elseif($form_id) {
                 $userit = UserExt::model()->findByPk($data['pid']);
                 $userut = UserExt::model()->findByPk($data['uid']);
-                $res = SmsExt::sendMsg('支付成功',$userut->phone,['name'=>$userut->name,'time'=>$data['begin']]);
+                $res = SmsExt::sendMsg('支付成功',$userit->phone,['name'=>$userut->name,'time'=>$data['begin']]);
                 Yii::log(json_encode($res));
                
             }
