@@ -84,7 +84,7 @@ class AliMsg
         $request->setPhoneNumbers($phoneNumbers);
 
         // 必填，设置签名名称
-        $request->setSignName('经纪圈');
+        $request->setSignName('明悦心空');
 
         // 必填，设置模板CODE
         $request->setTemplateCode($templateCode);
