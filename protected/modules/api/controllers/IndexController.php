@@ -170,7 +170,7 @@ class IndexController extends ApiController
             $obj = $user;
             unset($data['uid']);
             $obj->attributes = $data;
-            $data['is_edit'] && $obj->zxs_status = 0;
+            // $data['is_edit'] && $obj->zxs_status = 0;
             if(!$obj->save()) {
                 $this->returnError(current(current($obj->getErrors())));
             } else {
@@ -228,7 +228,7 @@ class IndexController extends ApiController
             $order->attributes = $data;
             if(!$order->save()) {
                 $this->returnError(current(current($order->getErrors())));
-            } elseif($form_id) {
+            } else {
                 $userit = UserExt::model()->findByPk($data['pid']);
                 $userut = UserExt::model()->findByPk($data['uid']);
                 $res = SmsExt::sendMsg('支付成功',$userit->phone,['name'=>$userut->name,'time'=>$data['begin']]);
