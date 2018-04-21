@@ -232,8 +232,8 @@ class IndexController extends ApiController
                 $this->returnError(current(current($order->getErrors())));
             } else {
                 $userit = UserExt::model()->findByPk($data['pid']);
-                $userut = UserExt::model()->findByPk($data['uid']);
-                $res = SmsExt::sendMsg('支付成功',$userit->phone,['name'=>$userut->name,'time'=>$data['begin']]);
+                // $userut = UserExt::model()->findByPk($data['uid']);
+                $res = SmsExt::sendMsg('支付成功',$userit->phone,['name'=>$userit->name,'time'=>$data['begin']]);
                 Yii::log(json_encode($res));
                
             }
