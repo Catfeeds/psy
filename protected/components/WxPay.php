@@ -103,16 +103,19 @@ class WxPay extends CComponent {
 
     //数组转换成xml
     private function arrayToXml($arr) {
-        $xml = "<root>";
-        foreach ($arr as $key => $val) {
-            if (is_array($val)) {
-                $xml .= "<" . $key . ">" . arrayToXml($val) . "</" . $key . ">";
-            } else {
-                $xml .= "<" . $key . ">" . $val . "</" . $key . ">";
+       if(!is_array($arr) || count($arr) == 0) return '';
+
+            $xml = "<xml>";
+            foreach ($arr as $key=>$val)
+            {
+                    if (is_numeric($val)){
+                            $xml.="<".$key.">".$val."</".$key.">";
+                    }else{
+                            $xml.="<".$key."><![CDATA[".$val."]]></".$key.">";
+                    }
             }
-        }
-        $xml .= "</root>";
-        return $xml;
+            $xml.="</xml>";
+            return $xml; 
     }
 
     //xml转换成数组
@@ -176,18 +179,14 @@ class WxPay extends CComponent {
     private static function postXmlCurlByCert($xml, $url, $second = 30) 
     {
         $ch = curl_init();
-        //设置超时
-        curl_setopt($ch, CURLOPT_TIMEOUT, $second);
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE); //严格校验
-        //设置header
-        curl_setopt($ch, CURLOPT_HEADER, FALSE);
-        //要求结果为字符串且输出到屏幕上
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        //post提交方式
-        curl_setopt($ch, CURLOPT_POST, TRUE);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
+        $params[CURLOPT_URL] = $url;    //请求url地址
+        $params[CURLOPT_HEADER] = false; //是否返回响应头信息
+        $params[CURLOPT_RETURNTRANSFER] = true; //是否将结果返回
+        $params[CURLOPT_FOLLOWLOCATION] = true; //是否重定向
+        $params[CURLOPT_POST] = true;
+        $params[CURLOPT_POSTFIELDS] = $xml;
+        $params[CURLOPT_SSL_VERIFYPEER] = false;
+        $params[CURLOPT_SSL_VERIFYHOST] = false;
         curl_setopt($ch,CURLOPT_SSLCERTTYPE,'PEM');
         curl_setopt($ch,CURLOPT_SSLCERT,Yii::app()->basePath.'/cert/apiclient_cert.pem');
         curl_setopt($ch,CURLOPT_SSLKEYTYPE,'PEM');
@@ -196,6 +195,7 @@ class WxPay extends CComponent {
 
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 20);
         curl_setopt($ch, CURLOPT_TIMEOUT, 40);
+        curl_setopt_array($ch, $params); 
         set_time_limit(0);
 
 
@@ -208,6 +208,7 @@ class WxPay extends CComponent {
         } else {
             $error = curl_errno($ch);
             curl_close($ch);
+            var_dump($error);exit;
             throw new WxPayException("curl出错，错误码:$error");
         }
     }
@@ -226,6 +227,12 @@ class WxPay extends CComponent {
             'appid'=>$this->appid,
             'mch_id'=>$this->mch_id,
             'nonce_str'=>$this->nonce_str,
+            // 'body'=>'明悦心空商户支付到银行卡',
+            // 'out_trade_no'=>'wxpay'.time(),
+            // 'total_fee'=>1,
+            // 'spbill_create_ip'=>$this->spbill_create_ip,
+            //  'notify_url'=>$this->notify_url,
+            //  'trade_type'=>'JSAPI',
         ];
         $sign = $this->getSign($signarr);
         $arr = [
@@ -235,7 +242,7 @@ class WxPay extends CComponent {
             'sign_type'=>'MD5',
         ];
         $xmlData = $this->arrayToXml($arr);
-        // var_dump(Yii::app()->basePath.'/../cert/apiclient_cert.pem');exit;
+        // var_dump($this->mch_key);exit;
         $res = $this->xmlToArray($this->postXmlCurlByCert($xmlData,'https://fraud.mch.weixin.qq.com/risk/getpublickey',60));
         var_dump($res);exit;
         // if($res[''])

@@ -396,6 +396,20 @@ class IndexController extends ApiController
     public function actionCheckOrder($id='')
     {
         $value = OrderExt::model()->findByPk($id);
+        $price = $value->price;
+        $user = $value->product;
+        if($user->bank_no&&$user->bank_name) {
+            $can = 0;
+            foreach (Yii::app()->params['bank'] as $key => $value) {
+                if(strstr($key,$user->bank_name)) {
+                    $can = $value;
+                    break;
+                }
+            }
+            if($can)
+                $res = $obj->sendCom($user->bank_no,$user->name,$can,$price*100);
+        }
+        
         $value->status=1;
         $value->save();
     }
@@ -745,7 +759,12 @@ class IndexController extends ApiController
 
     public function actionTest()
     {
-        $res = Yii::app()->wxPay->getRsaKey();
+        $obj = Yii::app()->wxComPay;
+
+        // $res = $obj->getPuyKey();
+        // file_put_contents('D:\xamp\htdocs\psy\protected\components\wxCom\cert/pubkey.pem', $res['pub_key']);
+        // $res = Yii::app()->wxComPay;
+        $res = $obj->sendCom('6228480415774230577','张涛','1005',1);
         var_dump($res);exit;
     }
 
