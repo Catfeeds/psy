@@ -149,6 +149,10 @@ class WxPay extends CComponent {
         //post提交方式
         curl_setopt($ch, CURLOPT_POST, TRUE);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
+        curl_setopt($ch,CURLOPT_SSLCERTTYPE,'PEM');
+        curl_setopt($ch,CURLOPT_SSLCERT,$certPath);
+        curl_setopt($ch,CURLOPT_SSLKEYTYPE,'PEM');
+        curl_setopt($ch,CURLOPT_SSLKEY,$keyPath);
 
 
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 20);
@@ -169,6 +173,44 @@ class WxPay extends CComponent {
         }
     }
 
+    private static function postXmlCurlByCert($xml, $url, $second = 30) 
+    {
+        $ch = curl_init();
+        //设置超时
+        curl_setopt($ch, CURLOPT_TIMEOUT, $second);
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE); //严格校验
+        //设置header
+        curl_setopt($ch, CURLOPT_HEADER, FALSE);
+        //要求结果为字符串且输出到屏幕上
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        //post提交方式
+        curl_setopt($ch, CURLOPT_POST, TRUE);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
+        curl_setopt($ch,CURLOPT_SSLCERTTYPE,'PEM');
+        curl_setopt($ch,CURLOPT_SSLCERT,Yii::app()->basePath.'/cert/apiclient_cert.pem');
+        curl_setopt($ch,CURLOPT_SSLKEYTYPE,'PEM');
+        curl_setopt($ch,CURLOPT_SSLKEY,Yii::app()->basePath.'/cert/apiclient_key.pem');
+
+
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 20);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 40);
+        set_time_limit(0);
+
+
+        //运行curl
+        $data = curl_exec($ch);
+        //返回结果
+        if ($data) {
+            curl_close($ch);
+            return $data;
+        } else {
+            $error = curl_errno($ch);
+            curl_close($ch);
+            throw new WxPayException("curl出错，错误码:$error");
+        }
+    }
     public function createNoncestr($length = 32) {
         $chars = "abcdefghijklmnopqrstuvwxyz0123456789";
         $str = "";
@@ -176,6 +218,27 @@ class WxPay extends CComponent {
             $str .= substr($chars, mt_rand(0, strlen($chars) - 1), 1);
         }
         return $str;
+    }
+
+    public function getRsaKey()
+    {
+        $signarr = [
+            'appid'=>$this->appid,
+            'mch_id'=>$this->mch_id,
+            'nonce_str'=>$this->nonce_str,
+        ];
+        $sign = $this->getSign($signarr);
+        $arr = [
+            'mch_id'=>$this->mch_id,
+            'nonce_str'=>$this->nonce_str,
+            'sign'=>$sign,
+            'sign_type'=>'MD5',
+        ];
+        $xmlData = $this->arrayToXml($arr);
+        // var_dump(Yii::app()->basePath.'/../cert/apiclient_cert.pem');exit;
+        $res = $this->xmlToArray($this->postXmlCurlByCert($xmlData,'https://fraud.mch.weixin.qq.com/risk/getpublickey',60));
+        var_dump($res);exit;
+        // if($res[''])
     }
 
 

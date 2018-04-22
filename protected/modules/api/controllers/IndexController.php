@@ -743,4 +743,10 @@ class IndexController extends ApiController
         
     }
 
+    public function actionTest()
+    {
+        $res = Yii::app()->wxPay->getRsaKey();
+        var_dump($res);exit;
+    }
+
 }
