@@ -115,7 +115,7 @@ $config1 = array(
             'class' => 'application.components.WxPay',
         ],
         'wxComPay' => [
-            'class' => 'application.components.wxCom.wxComPay',
+            'class' => 'application.components.wxCom.WxComPay',
         ],
         'redis' => [
             'class' => 'application.components.redis.HangjiaRedisConnection',
