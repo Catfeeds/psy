@@ -409,6 +409,7 @@ class IndexController extends ApiController
             if($can){
                 $obj = Yii::app()->wxComPay;
                 $res = $obj->sendCom($user->bank_no,$user->name,$can,$price*100);
+                Yii::log(json_encode($res));
             }
         }
         
