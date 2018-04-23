@@ -400,9 +400,9 @@ class IndexController extends ApiController
         $user = $value->product;
         if($user->bank_no&&$user->bank_name) {
             $can = 0;
-            foreach (Yii::app()->params['bank'] as $key => $value) {
+            foreach (Yii::app()->params['bank'] as $key => $v) {
                 if(strstr($key,$user->bank_name)) {
-                    $can = $value;
+                    $can = $v;
                     break;
                 }
             }
