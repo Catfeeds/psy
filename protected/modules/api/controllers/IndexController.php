@@ -269,6 +269,9 @@ class IndexController extends ApiController
         if($infos) {
             foreach ($infos as $key => $value) {
                 $iuser = $value->user;
+                if(!$iuser) {
+                    continue;
+                }
                 // $num += $value->price;
                 $data[] = [
                     'id'=>$value->id,
