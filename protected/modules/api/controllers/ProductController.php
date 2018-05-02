@@ -57,7 +57,7 @@ class ProductController extends ApiController
 		}
 		$ids = [];
 		if($ly) {
-			$saeids = Yii::app()->db->createCommand("select uid from tag where tid=$ly")->queryAll();
+			$saeids = Yii::app()->db->createCommand("select uid from user_tag where tid=$ly")->queryAll();
 			if($saeids) {
 				foreach ($saeids as $key => $value) {
 					$ids[] = $value['uid'];

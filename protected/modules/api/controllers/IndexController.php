@@ -232,8 +232,8 @@ class IndexController extends ApiController
                 $this->returnError(current(current($order->getErrors())));
             } else {
                 $userit = UserExt::model()->findByPk($data['pid']);
-                $userut = UserExt::model()->findByPk($data['uid']);
-                $res = SmsExt::sendMsg('支付成功',$userit->phone,['name'=>$userut->name,'time'=>$data['begin']]);
+                // $userut = UserExt::model()->findByPk($data['uid']);
+                $res = SmsExt::sendMsg('支付成功',$userit->phone,['name'=>$userit->name,'time'=>$data['begin']]);
                 Yii::log(json_encode($res));
                
             }
@@ -399,6 +399,23 @@ class IndexController extends ApiController
     public function actionCheckOrder($id='')
     {
         $value = OrderExt::model()->findByPk($id);
+        $price = $value->price;
+        $user = $value->product;
+        if($user->bank_no&&$user->bank_name) {
+            $can = 0;
+            foreach (Yii::app()->params['bank'] as $key => $v) {
+                if(strstr($key,$user->bank_name)) {
+                    $can = $v;
+                    break;
+                }
+            }
+            if($can){
+                $obj = Yii::app()->wxComPay;
+                $res = $obj->sendCom($user->bank_no,$user->name,$can,$price*100*SiteExt::getAttr('qjpz','zk'));
+                Yii::log(json_encode($res));
+            }
+        }
+        
         $value->status=1;
         $value->save();
     }
@@ -744,6 +761,17 @@ class IndexController extends ApiController
     public function actionPay()
     {
         
+    }
+
+    public function actionTest()
+    {
+        $obj = Yii::app()->wxComPay;
+
+        // $res = $obj->getPuyKey();
+        // file_put_contents('D:\xamp\htdocs\psy\protected\components\wxCom\cert/pubkey.pem', $res['pub_key']);
+        // $res = Yii::app()->wxComPay;
+        $res = $obj->sendCom('6228480415774230577','张涛','1005',1);
+        var_dump($res);exit;
     }
 
 }
