@@ -76,10 +76,20 @@ class UserExt extends User{
     }
 
     public function beforeValidate() {
+        // 如果审核通过则发短信
         if($this->getIsNewRecord()) {
+            if($this->status==1 && $this->type==2) {
+                SmsExt::sendMsg('审核通过',$this->phone,['name'=>$this->name,'tel'=>SiteExt::getAttr('qjpz','tel')]);
+            }
             $this->created = $this->updated = time();
         }
         else {
+            // Yii::log(Yii::app()->db->createCommand("select zxs_status from user where phone='".$this->phone."'")->queryScalar());
+            if($this->status==1 && $this->type==2 && Yii::app()->db->createCommand("select zxs_status from user where id=".$this->id)->queryScalar()==0) {
+
+                $res = SmsExt::sendMsg('审核通过',$this->phone,['name'=>$this->name,'tel'=>SiteExt::getAttr('qjpz','tel')]);
+                // Yii::log($res);
+            }
             $this->updated = time();
         }
         if($this->area && $areaInfo = $this->areaInfo) {
