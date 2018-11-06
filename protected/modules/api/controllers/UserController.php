@@ -128,4 +128,9 @@ class UserController extends ApiController{
 			}	
 		}
 	}
+
+	public function actionGetZxsInfo($id)
+	{
+		$user = UserExt::model()->findByPk($id);
+	}
 }
