@@ -67,4 +67,21 @@ class QfController extends AdminController{
 		} 
 		$this->render('edit',['cates'=>$this->cates,'article'=>$info,'cates1'=>$this->cates1,]);
 	}
+
+	public function actionSendNo()
+	{
+		$note = Yii::app()->request->getPost('note','');
+		$phones = Yii::app()->request->getPost('ids');
+		if(is_array($phones)) {
+			$phones = implode(',', $phones);
+		}
+		if(strlen($note)>19) {
+			return $this->setMessage('字数不能超过19字','error');
+		}
+		$obj = new QfExt;
+		$obj->phones = $phones;
+		$obj->note = $note;
+		$obj->save();
+		$this->setMessage('操作成功');
+	}
 }

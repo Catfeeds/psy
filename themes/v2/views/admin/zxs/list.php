@@ -28,6 +28,7 @@ $this->breadcrumbs = array($this->pageTitle);
    <table class="table table-bordered table-striped table-condensed flip-content table-hover">
     <thead class="flip-content">
     <tr>
+        <th width="35px"><input type="checkbox"></th>
         <th class="text-center">排序</th>
         <th class="text-center">ID</th>
         <th class="text-center">姓名</th>
@@ -45,6 +46,7 @@ $this->breadcrumbs = array($this->pageTitle);
     <tbody>
     <?php foreach($infos as $k=>$v): ?>
         <tr>
+            <td class="text-center"><input type="checkbox" name="item[]" value="<?php echo $v['phone'] ?>" class="checkboxes"></td>
             <td style="text-align:center;vertical-align: middle" class="warning sort_edit"
                 data-id="<?php echo $v['id'] ?>"><?php echo $v['sort'] ?></td>
             <td style="text-align:center;vertical-align: middle"><?php echo $v->id; ?></td>
@@ -70,6 +72,11 @@ $this->breadcrumbs = array($this->pageTitle);
     <?php endforeach;?>
     </tbody>
 </table>
+<div class="form-group">
+    <button type="button" class="btn btn-success btn-sm group-checkable" data-set=".checkboxes">全选/反选</button>
+    <?php echo CHtml::ajaxButton('发送短信', $this->createUrl('/admin/qf/sendNo'), array('data'=>array('ids'=>'js:getChecked()','note'=>'js:getNote()'),'type'=>'post', 'success'=>'function(data){location.reload()}',  'error'=>'function(data){alert(data)}' , 'beforeSend'=>'function(){if(!getChecked()){toastr.error("请至少选择一项！");return false;}if(!getNote()){toastr.error("请填写短信内容！");return false;}}'), array('class'=>'btn btn-success btn-sm')); ?>
+    <textarea id="tx1" placeholder="请输入短信内容" style="width: 400px;min-height: 50px"></textarea>
+</div>
 <?php $this->widget('VipLinkPager', array('pages'=>$pager)); ?>
 
 <script>
@@ -124,6 +131,11 @@ $this->breadcrumbs = array($this->pageTitle);
                 }
             }
         });
+        return ids;
+    }
+    var getNote  = function(){
+        var ids = "";
+        ids = $('#tx1').val();
         return ids;
     }
 

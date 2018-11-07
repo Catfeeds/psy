@@ -55,7 +55,7 @@ class QfExt extends Qf{
                 $users = UserExt::model()->findAll($cre);
                 $tel = SiteExt::getAttr('qjpz','tel');
                 foreach ($users as $key => $value) {
-                    SmsExt::sendMsg('群发',$value->phone,['name'=>$value->name,'tel'=>','.$this->note]);
+                    SmsExt::sendMsg('群发',$value->phone,['name'=>$value->name,'tel'=>'。'.$this->note]);
                 }
             }
             $this->created = $this->updated = time();
