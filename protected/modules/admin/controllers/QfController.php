@@ -75,8 +75,8 @@ class QfController extends AdminController{
 		if(is_array($phones)) {
 			$phones = implode(',', $phones);
 		}
-		if(strlen($note)>38) {
-			return $this->setMessage('字数不能超过19字','error');
+		if(mb_strlen($note)>19) {
+			return $this->setMessage('字数不能超过19字,当前字数为'.mb_strlen($note),'error');
 		}
 		$obj = new QfExt;
 		$obj->phones = $phones;
